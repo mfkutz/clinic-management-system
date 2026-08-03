@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* La app usa siempre modo claro (para que coincida con el diseño de referencia),
+   en vez del comportamiento por defecto de Tailwind que sigue prefers-color-scheme
+   del sistema operativo. Las clases dark: quedan en el código pero nunca se activan
+   porque nada le agrega la clase "dark" al html. */
+@custom-variant dark (&:where(.dark, .dark *));
