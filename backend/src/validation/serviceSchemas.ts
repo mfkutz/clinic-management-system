@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { SERVICE_CATEGORIES } from '../models/Service';
 
 export const createServiceSchema = z.object({
   name: z.string().min(2, 'El nombre es muy corto'),
   description: z.string().optional(),
   durationMinutes: z.number().int().positive('La duración debe ser mayor a 0'),
   price: z.number().nonnegative('El precio no puede ser negativo'),
+  category: z.enum(SERVICE_CATEGORIES),
 });
 
 export const updateServiceSchema = createServiceSchema.partial().extend({

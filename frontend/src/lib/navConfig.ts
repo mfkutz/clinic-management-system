@@ -29,23 +29,24 @@ export interface NavSection {
 }
 
 export const pageTitles: Record<string, string> = {
-  '/': 'Inicio',
+  '/inicio': 'Inicio',
+  '/agenda': 'Agenda',
   '/reservar': 'Reservar turno',
   '/mis-turnos': 'Mis turnos',
   '/admin/servicios': 'Servicios',
   '/admin/profesionales': 'Profesionales',
   '/profesional/disponibilidad': 'Disponibilidad',
-  '/profesional/agenda': 'Agenda',
   '/pacientes': 'Pacientes',
   '/historias-clinicas': 'Historias clínicas',
   '/cobros': 'Cobros',
+  '/reportes': 'Reportes',
   '/soporte': 'Soporte',
   '/proximamente': 'Próximamente',
 };
 
 export const navSections: Record<UserRole, NavSection[]> = {
   client: [
-    { items: [{ to: '/', label: 'Inicio', icon: LayoutDashboard, end: true }] },
+    { items: [{ to: '/inicio', label: 'Inicio', icon: LayoutDashboard, end: true }] },
     {
       title: 'Turnos',
       items: [
@@ -58,7 +59,12 @@ export const navSections: Record<UserRole, NavSection[]> = {
     },
   ],
   admin: [
-    { items: [{ to: '/', label: 'Inicio', icon: LayoutDashboard, end: true }] },
+    {
+      items: [
+        { to: '/inicio', label: 'Inicio', icon: LayoutDashboard, end: true },
+        { to: '/agenda', label: 'Agenda', icon: CalendarRange },
+      ],
+    },
     {
       title: 'Gestión',
       items: [
@@ -77,7 +83,7 @@ export const navSections: Record<UserRole, NavSection[]> = {
       title: 'Finanzas',
       items: [
         { to: '/cobros', label: 'Cobros', icon: CreditCard },
-        { to: '/proximamente', label: 'Reportes', icon: BarChart3, comingSoon: true },
+        { to: '/reportes', label: 'Reportes', icon: BarChart3 },
       ],
     },
     {
@@ -85,12 +91,12 @@ export const navSections: Record<UserRole, NavSection[]> = {
     },
   ],
   professional: [
-    { items: [{ to: '/', label: 'Inicio', icon: LayoutDashboard, end: true }] },
+    { items: [{ to: '/inicio', label: 'Inicio', icon: LayoutDashboard, end: true }] },
     {
       title: 'Agenda',
       items: [
         { to: '/profesional/disponibilidad', label: 'Disponibilidad', icon: Clock },
-        { to: '/profesional/agenda', label: 'Agenda', icon: CalendarRange },
+        { to: '/agenda', label: 'Agenda', icon: CalendarRange },
       ],
     },
     {

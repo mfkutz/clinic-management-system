@@ -35,3 +35,13 @@ export async function markAsPaid(req: Request, res: Response) {
   const appointment = await appointmentService.markAsPaid(req.params.id as string, data.paymentMethod);
   res.json(appointment);
 }
+
+export async function complete(req: Request, res: Response) {
+  const appointment = await appointmentService.completeAppointment(req.user!, req.params.id as string);
+  res.json(appointment);
+}
+
+export async function markNoShow(req: Request, res: Response) {
+  const appointment = await appointmentService.markNoShow(req.user!, req.params.id as string);
+  res.json(appointment);
+}

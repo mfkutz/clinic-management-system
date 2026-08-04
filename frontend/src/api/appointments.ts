@@ -39,3 +39,13 @@ export async function markAsPaid(id: string, paymentMethod?: string): Promise<Ap
   const res = await apiClient.patch<Appointment>(`/appointments/${id}/pay`, { paymentMethod });
   return res.data;
 }
+
+export async function complete(id: string): Promise<Appointment> {
+  const res = await apiClient.patch<Appointment>(`/appointments/${id}/complete`);
+  return res.data;
+}
+
+export async function markNoShow(id: string): Promise<Appointment> {
+  const res = await apiClient.patch<Appointment>(`/appointments/${id}/no-show`);
+  return res.data;
+}

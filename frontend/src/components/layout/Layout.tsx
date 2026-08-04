@@ -1,6 +1,6 @@
 import { CalendarClock } from 'lucide-react';
 import { useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { Sidebar } from './Sidebar';
 import { TopHeader } from './TopHeader';
@@ -8,6 +8,16 @@ import { TopHeader } from './TopHeader';
 export function Layout() {
   const user = useAuthStore((s) => s.user);
   const [collapsed, setCollapsed] = useState(false);
+  const location = useLocation();
+  // Rutas ya rediseñadas sección por sección (handoff de Claude Design), que manejan sus propias
+  // cards en vez de depender del wrapper genérico de abajo. Algunas son solo para admin (su
+  // contenido en '/inicio' difiere por rol); '/agenda' es compartida entre admin y profesional.
+  const ADMIN_ONLY_FULL_BLEED_PATHS = ['/inicio', '/admin/servicios', '/admin/profesionales', '/reportes'];
+  const SHARED_FULL_BLEED_PATHS = ['/agenda', '/historias-clinicas'];
+  const isFullBleed =
+    (user?.role === 'admin' && ADMIN_ONLY_FULL_BLEED_PATHS.includes(location.pathname)) ||
+    SHARED_FULL_BLEED_PATHS.includes(location.pathname) ||
+    location.pathname.startsWith('/pacientes/');
 
   if (!user) {
     return (
@@ -28,15 +38,21 @@ export function Layout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="flex h-screen overflow-hidden bg-[#f6f7f9]">
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopHeader onToggleSidebar={() => setCollapsed((v) => !v)} />
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        {isFullBleed ? (
+          <main className="flex-1 overflow-y-auto">
             <Outlet />
-          </div>
-        </main>
+          </main>
+        ) : (
+          <main className="flex-1 overflow-y-auto p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+              <Outlet />
+            </div>
+          </main>
+        )}
       </div>
     </div>
   );

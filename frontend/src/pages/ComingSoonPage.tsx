@@ -11,7 +11,7 @@ export function ComingSoonPage() {
       <p className="mt-1 max-w-sm text-sm text-gray-500 dark:text-gray-400">
         Todavía no está implementada, pero ya está pensada en el diseño del sistema.
       </p>
-      <Link to="/" className="mt-4 text-sm font-medium text-indigo-600 hover:underline">
+      <Link to="/inicio" className="mt-4 text-sm font-medium text-indigo-600 hover:underline">
         Volver al inicio
       </Link>
     </div>
