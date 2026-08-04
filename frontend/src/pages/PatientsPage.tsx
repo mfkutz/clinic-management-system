@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Calendar, CalendarCheck, Search, UserCheck, UserRound, UserX } from 'lucide-react';
 import * as patientsApi from '../api/patients';
 import { getErrorMessage } from '../api/client';
+import { avatarStyle } from '../lib/avatarColor';
+import { getInitials } from '../lib/format';
 import type { PatientSummary } from '../types';
 
-function initialsOf(name: string) {
-  return name
-    .split(' ')
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+function lastVisitLabel(iso: string | null): string {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).replace('.', '');
 }
 
 export function PatientsPage() {
   const [patients, setPatients] = useState<PatientSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     patientsApi
@@ -26,57 +26,125 @@ export function PatientsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-sm text-gray-500">Cargando…</p>;
-  if (error) return <p className="text-sm text-red-600">{error}</p>;
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return patients;
+    return patients.filter((p) => p.name.toLowerCase().includes(q) || p.email.toLowerCase().includes(q));
+  }, [patients, search]);
 
-  if (patients.length === 0) {
-    return <p className="text-sm text-gray-500">Todavía no hay pacientes con turnos registrados.</p>;
-  }
+  const activeCount = patients.filter((p) => p.active).length;
+  const totalAppointments = patients.reduce((sum, p) => sum + p.appointmentsCount, 0);
+
+  if (loading) return <p className="p-7 text-sm text-gray-500">Cargando…</p>;
+  if (error) return <p className="p-7 text-sm text-red-600">{error}</p>;
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm">
-        <thead>
-          <tr className="border-b border-gray-200 text-[11px] font-semibold tracking-wide text-gray-400 uppercase dark:border-gray-800">
-            <th className="py-2.5 pr-4 font-semibold">Paciente</th>
-            <th className="px-4 py-2.5 font-semibold">Teléfono</th>
-            <th className="px-4 py-2.5 font-semibold">Turnos</th>
-            <th className="px-4 py-2.5 font-semibold">Última visita</th>
-            <th className="py-2.5 pl-4 font-semibold">
-              <span className="sr-only">Acciones</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-          {patients.map((p) => (
-            <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/40">
-              <td className="py-3 pr-4">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
-                    {initialsOf(p.name)}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="truncate font-medium text-gray-900 dark:text-gray-100">{p.name}</p>
-                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">{p.email}</p>
+    <div className="px-[28px] pt-[26px] pb-[40px]">
+      <div className="mb-[22px]">
+        <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
+          <UserRound className="h-[17px] w-[17px]" />
+          Historial de la clínica
+        </div>
+        <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">Pacientes</h2>
+        <p className="m-0 text-[14px] text-[#6b7480]">Historial y datos de contacto de tus pacientes.</p>
+      </div>
+
+      <div className="mb-[22px] grid grid-cols-4 gap-4">
+        {[
+          { icon: UserRound, value: String(patients.length), label: 'Pacientes totales', bg: '#eef0fe', color: '#5847eb' },
+          { icon: UserCheck, value: String(activeCount), label: 'Activos', bg: '#eaf7ef', color: '#16a34a' },
+          { icon: UserX, value: String(patients.length - activeCount), label: 'Inactivos', bg: '#eef1f4', color: '#6b7480' },
+          { icon: CalendarCheck, value: String(totalAppointments), label: 'Turnos acumulados', bg: '#fef4e8', color: '#d97706' },
+        ].map((k) => (
+          <div key={k.label} className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ background: k.bg, color: k.color }}>
+              <k.icon className="h-[23px] w-[23px]" />
+            </span>
+            <div>
+              <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{k.value}</div>
+              <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">{k.label}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mb-4 flex items-center gap-2 rounded-[11px] border border-[#eaecef] bg-white px-[13px] py-2.5 text-[#9aa1ac] max-w-[360px]">
+        <Search className="h-[19px] w-[19px] shrink-0" />
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar paciente…"
+          className="w-full text-[13.5px] text-[#171a1f] placeholder:text-[#9aa1ac] focus:outline-none"
+        />
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="text-sm text-[#8a919c]">
+          {patients.length === 0 ? 'Todavía no hay pacientes con turnos registrados.' : 'No hay pacientes que coincidan con la búsqueda.'}
+        </p>
+      ) : (
+        <div className="overflow-hidden rounded-2xl border border-[#eaecef] bg-white">
+          <div className="flex items-center gap-4 border-b border-[#f0f1f3] px-5 py-3 text-[11px] font-bold tracking-[.04em] text-[#9aa1ac] uppercase">
+            <span className="flex-1">Paciente</span>
+            <span className="w-[150px] shrink-0">Teléfono</span>
+            <span className="w-[110px] shrink-0">Turnos</span>
+            <span className="w-[130px] shrink-0">Última visita</span>
+            <span className="w-[90px] shrink-0">Estado</span>
+            <span className="w-[70px] shrink-0 text-right">&nbsp;</span>
+          </div>
+          <div className="flex flex-col">
+            {filtered.map((p) => {
+              const avatar = avatarStyle(p.id);
+              return (
+                <div
+                  key={p.id}
+                  className="flex items-center gap-4 border-b border-[#f4f5f7] px-5 py-3.5 last:border-b-0 hover:bg-[#fafbfc]"
+                  style={{ opacity: p.active ? 1 : 0.7 }}
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-3">
+                    <span
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] text-[13px] font-bold"
+                      style={{ background: avatar.bg, color: avatar.color }}
+                    >
+                      {getInitials(p.name)}
+                    </span>
+                    <div className="min-w-0">
+                      <div className="truncate text-[14px] font-bold text-[#171a1f]">{p.name}</div>
+                      <div className="truncate text-[12px] text-[#8a919c]">{p.email}</div>
+                    </div>
+                  </div>
+                  <div className="w-[150px] shrink-0 text-[13px] text-[#4b535e]">{p.phone || '—'}</div>
+                  <div className="w-[110px] shrink-0">
+                    <span className="rounded-[20px] bg-[#eef0fe] px-[10px] py-[4px] text-[12px] font-bold text-[#5847eb]">
+                      {p.appointmentsCount} turno{p.appointmentsCount === 1 ? '' : 's'}
+                    </span>
+                  </div>
+                  <div className="flex w-[130px] shrink-0 items-center gap-1.5 text-[12.5px] text-[#6b7480]">
+                    <Calendar className="h-3.5 w-3.5 text-[#a3a9b2]" />
+                    {lastVisitLabel(p.lastVisit)}
+                  </div>
+                  <div className="w-[90px] shrink-0">
+                    <span
+                      className="rounded-[20px] px-[10px] py-[4px] text-[11px] font-bold"
+                      style={p.active ? { background: '#eaf7ef', color: '#16a34a' } : { background: '#eef1f4', color: '#98a0ab' }}
+                    >
+                      {p.active ? 'Activo' : 'Inactivo'}
+                    </span>
+                  </div>
+                  <div className="w-[70px] shrink-0 text-right">
+                    <Link
+                      to={`/pacientes/${p.id}`}
+                      className="rounded-[9px] border border-[#eaecef] px-3 py-1.5 text-[12.5px] font-bold text-[#4b535e] hover:bg-[#f4f5f7]"
+                    >
+                      Ver
+                    </Link>
                   </div>
                 </div>
-              </td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{p.phone || '—'}</td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{p.appointmentsCount}</td>
-              <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                {p.lastVisit
-                  ? new Date(p.lastVisit).toLocaleDateString('es-AR', { timeZone: 'UTC' })
-                  : '—'}
-              </td>
-              <td className="py-3 pl-4 text-right">
-                <Link to={`/pacientes/${p.id}`} className="text-sm font-medium text-indigo-600 hover:underline">
-                  Ver
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

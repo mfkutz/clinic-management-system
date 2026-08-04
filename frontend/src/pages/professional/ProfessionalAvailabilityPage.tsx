@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { CalendarOff, Clock, Plus, X } from 'lucide-react';
 import * as availabilityApi from '../../api/availability';
 import { getErrorMessage } from '../../api/client';
 import * as professionalsApi from '../../api/professionals';
@@ -14,6 +15,10 @@ import {
 
 const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
+const inputClass =
+  'w-full rounded-[10px] border border-[#eaecef] bg-white px-3 py-2 text-[13.5px] text-[#171a1f] focus:border-[#5847eb] focus:outline-none';
+const labelClass = 'mb-1.5 block text-[12.5px] font-semibold text-[#4b535e]';
+
 function AvailabilityForm({ onSubmit }: { onSubmit: (values: CreateAvailabilityFormValues) => Promise<void> }) {
   const {
     register,
@@ -25,15 +30,12 @@ function AvailabilityForm({ onSubmit }: { onSubmit: (values: CreateAvailabilityF
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-      <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Agregar franja horaria</h3>
+    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-[#eaecef] bg-white p-5">
+      <h3 className="mb-3.5 text-[15px] font-extrabold tracking-[-.2px] text-[#171a1f]">Agregar franja horaria</h3>
       <div className="grid grid-cols-3 gap-3">
         <div>
-          <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Día</label>
-          <select
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            {...register('dayOfWeek', { valueAsNumber: true })}
-          >
+          <label className={labelClass}>Día</label>
+          <select className={inputClass} {...register('dayOfWeek', { valueAsNumber: true })}>
             {dayNames.map((name, i) => (
               <option key={i} value={i}>
                 {name}
@@ -42,28 +44,21 @@ function AvailabilityForm({ onSubmit }: { onSubmit: (values: CreateAvailabilityF
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Desde</label>
-          <input
-            type="time"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            {...register('startTime')}
-          />
+          <label className={labelClass}>Desde</label>
+          <input type="time" className={inputClass} {...register('startTime')} />
         </div>
         <div>
-          <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Hasta</label>
-          <input
-            type="time"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            {...register('endTime')}
-          />
+          <label className={labelClass}>Hasta</label>
+          <input type="time" className={inputClass} {...register('endTime')} />
         </div>
       </div>
-      {errors.endTime && <p className="mt-1 text-sm text-red-600">{errors.endTime.message}</p>}
+      {errors.endTime && <p className="mt-2 text-[12.5px] text-red-600">{errors.endTime.message}</p>}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-3 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+        className="mt-3.5 flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-4 py-2.5 text-[13px] font-bold text-white hover:bg-[#4636cf] disabled:opacity-60"
       >
+        <Plus className="h-[18px] w-[18px]" />
         Agregar
       </button>
     </form>
@@ -83,46 +78,31 @@ function ExceptionForm({ onSubmit }: { onSubmit: (values: CreateExceptionFormVal
   const isBlocked = watch('isBlocked');
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg border border-gray-200 p-4 dark:border-gray-800">
-      <h3 className="mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Agregar excepción</h3>
-      <div className="grid gap-3 sm:grid-cols-3">
+    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-[#eaecef] bg-white p-5">
+      <h3 className="mb-3.5 text-[15px] font-extrabold tracking-[-.2px] text-[#171a1f]">Agregar excepción</h3>
+      <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Fecha</label>
-          <input
-            type="date"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-            {...register('date')}
-          />
-          {errors.date && <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>}
+          <label className={labelClass}>Fecha</label>
+          <input type="date" className={inputClass} {...register('date')} />
+          {errors.date && <p className="mt-1.5 text-[12.5px] text-red-600">{errors.date.message}</p>}
         </div>
-
-        <div className="flex items-end pb-2">
-          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-            <input type="checkbox" {...register('isBlocked')} />
-            Bloquear el día completo
-          </label>
-        </div>
+        <label className="flex items-center gap-2 pt-6 text-[13px] font-semibold text-[#4b535e]">
+          <input type="checkbox" className="h-4 w-4 accent-[#5847eb]" {...register('isBlocked')} />
+          Bloquear el día completo
+        </label>
       </div>
 
       {!isBlocked && (
         <div className="mt-3 grid grid-cols-2 gap-3">
           <div>
-            <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Desde</label>
-            <input
-              type="time"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-              {...register('startTime')}
-            />
-            {errors.startTime && <p className="mt-1 text-sm text-red-600">{errors.startTime.message}</p>}
+            <label className={labelClass}>Desde</label>
+            <input type="time" className={inputClass} {...register('startTime')} />
+            {errors.startTime && <p className="mt-1.5 text-[12.5px] text-red-600">{errors.startTime.message}</p>}
           </div>
           <div>
-            <label className="mb-1 block text-sm text-gray-700 dark:text-gray-300">Hasta</label>
-            <input
-              type="time"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-              {...register('endTime')}
-            />
-            {errors.endTime && <p className="mt-1 text-sm text-red-600">{errors.endTime.message}</p>}
+            <label className={labelClass}>Hasta</label>
+            <input type="time" className={inputClass} {...register('endTime')} />
+            {errors.endTime && <p className="mt-1.5 text-[12.5px] text-red-600">{errors.endTime.message}</p>}
           </div>
         </div>
       )}
@@ -130,8 +110,9 @@ function ExceptionForm({ onSubmit }: { onSubmit: (values: CreateExceptionFormVal
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-3 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+        className="mt-3.5 flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-4 py-2.5 text-[13px] font-bold text-white hover:bg-[#4636cf] disabled:opacity-60"
       >
+        <Plus className="h-[18px] w-[18px]" />
         Agregar excepción
       </button>
     </form>
@@ -223,68 +204,103 @@ export function ProfessionalAvailabilityPage() {
     }
   }
 
+  const availabilityByDay = dayNames
+    .map((name, dayOfWeek) => ({ dayOfWeek, name, slots: availabilities.filter((a) => a.dayOfWeek === dayOfWeek) }))
+    .filter((d) => d.slots.length > 0);
+
+  if (loading) return <p className="p-7 text-sm text-gray-500">Cargando…</p>;
+  if (error && !professionalId) return <p className="p-7 text-sm text-red-600">{error}</p>;
+
   return (
-    <div className="max-w-3xl">
-      {loading && <p className="text-sm text-gray-500">Cargando…</p>}
+    <div className="px-[28px] pt-[26px] pb-[40px]">
+      <div className="mb-[22px]">
+        <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
+          <Clock className="h-[17px] w-[17px]" />
+          Tu agenda
+        </div>
+        <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">Disponibilidad</h2>
+        <p className="m-0 text-[14px] text-[#6b7480]">Definí tu horario semanal recurrente y los días excepcionales.</p>
+      </div>
+
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      {!loading && professionalId && (
-        <div className="flex flex-col gap-8">
-          <section>
-            <h2 className="mb-3 text-lg font-medium text-gray-900 dark:text-gray-100">Disponibilidad semanal</h2>
+      {professionalId && (
+        <div className="grid grid-cols-2 gap-5">
+          <section className="flex flex-col gap-4">
+            <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Disponibilidad semanal</h3>
             <AvailabilityForm key={availabilityFormKey} onSubmit={handleAddAvailability} />
-            <ul className="mt-4 flex flex-col gap-2">
-              {availabilities.length === 0 && <p className="text-sm text-gray-500">Todavía no cargaste horarios.</p>}
-              {availabilities.map((a) => (
-                <li
-                  key={a.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-2 text-sm dark:border-gray-800"
-                >
-                  <span className="text-gray-800 dark:text-gray-200">
-                    {dayNames[a.dayOfWeek]}: {a.startTime.slice(0, 5)} – {a.endTime.slice(0, 5)}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveAvailability(a.id)}
-                    disabled={busyId === a.id}
-                    className="text-red-600 hover:underline disabled:opacity-60"
-                  >
-                    Quitar
-                  </button>
-                </li>
-              ))}
-            </ul>
+
+            {availabilityByDay.length === 0 ? (
+              <p className="text-[13px] text-[#8a919c]">Todavía no cargaste horarios.</p>
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {availabilityByDay.map((d) => (
+                  <div key={d.dayOfWeek} className="rounded-[14px] border border-[#eaecef] bg-white px-4 py-3.5">
+                    <div className="mb-2 text-[13px] font-bold text-[#171a1f]">{d.name}</div>
+                    <div className="flex flex-wrap gap-2">
+                      {d.slots.map((a) => (
+                        <span
+                          key={a.id}
+                          className="flex items-center gap-1.5 rounded-[20px] bg-[#eef0fe] px-3 py-1.5 text-[12.5px] font-bold text-[#5847eb]"
+                        >
+                          {a.startTime.slice(0, 5)} – {a.endTime.slice(0, 5)}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAvailability(a.id)}
+                            disabled={busyId === a.id}
+                            className="rounded-full p-0.5 hover:bg-[#5847eb] hover:text-white disabled:opacity-60"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
-          <section>
-            <h2 className="mb-3 text-lg font-medium text-gray-900 dark:text-gray-100">Excepciones</h2>
+          <section className="flex flex-col gap-4">
+            <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Excepciones</h3>
             <ExceptionForm key={exceptionFormKey} onSubmit={handleAddException} />
-            <ul className="mt-4 flex flex-col gap-2">
-              {exceptions.length === 0 && <p className="text-sm text-gray-500">Sin excepciones cargadas.</p>}
-              {exceptions.map((e) => (
-                <li
-                  key={e.id}
-                  className="flex items-center justify-between rounded-lg border border-gray-200 px-4 py-2 text-sm dark:border-gray-800"
-                >
-                  <span className="text-gray-800 dark:text-gray-200">
-                    {e.date} —{' '}
-                    {e.isBlocked
-                      ? e.startTime && e.endTime
-                        ? `Bloqueado ${e.startTime.slice(0, 5)}–${e.endTime.slice(0, 5)}`
-                        : 'Día completo bloqueado'
-                      : `Horario extra ${e.startTime?.slice(0, 5)}–${e.endTime?.slice(0, 5)}`}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveException(e.id)}
-                    disabled={busyId === e.id}
-                    className="text-red-600 hover:underline disabled:opacity-60"
-                  >
-                    Quitar
-                  </button>
-                </li>
-              ))}
-            </ul>
+
+            {exceptions.length === 0 ? (
+              <p className="text-[13px] text-[#8a919c]">Sin excepciones cargadas.</p>
+            ) : (
+              <div className="flex flex-col gap-2.5">
+                {exceptions.map((e) => (
+                  <div key={e.id} className="flex items-center gap-3.5 rounded-[14px] border border-[#eaecef] bg-white px-4 py-3.5">
+                    <span
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px]"
+                      style={e.isBlocked ? { background: '#fdecec', color: '#dc2626' } : { background: '#eaf7ef', color: '#16a34a' }}
+                    >
+                      <CalendarOff className="h-[18px] w-[18px]" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[13px] font-bold text-[#171a1f]">
+                        {new Date(`${e.date}T00:00:00Z`).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', timeZone: 'UTC' })}
+                      </div>
+                      <div className="mt-0.5 text-[12px] text-[#8a919c]">
+                        {e.isBlocked
+                          ? e.startTime && e.endTime
+                            ? `Bloqueado ${e.startTime.slice(0, 5)}–${e.endTime.slice(0, 5)}`
+                            : 'Día completo bloqueado'
+                          : `Horario extra ${e.startTime?.slice(0, 5)}–${e.endTime?.slice(0, 5)}`}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveException(e.id)}
+                      disabled={busyId === e.id}
+                      className="rounded-[9px] border border-[#f0d4d4] px-3 py-1.5 text-[12.5px] font-bold text-[#dc2626] hover:bg-[#fdecec] disabled:opacity-60"
+                    >
+                      Quitar
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       )}
