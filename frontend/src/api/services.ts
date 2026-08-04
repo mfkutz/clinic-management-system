@@ -1,15 +1,21 @@
 import { apiClient } from './client';
-import type { Service } from '../types';
+import type { Service, ServiceCategory } from '../types';
 
 export interface CreateServicePayload {
   name: string;
   description?: string;
   durationMinutes: number;
   price: number;
+  category: ServiceCategory;
 }
 
 export interface UpdateServicePayload extends Partial<CreateServicePayload> {
   active?: boolean;
+}
+
+export async function list(): Promise<Service[]> {
+  const res = await apiClient.get<Service[]>('/services');
+  return res.data;
 }
 
 export async function listAll(): Promise<Service[]> {

@@ -219,6 +219,46 @@ export async function cancelAppointment(requester: Requester, appointmentId: str
   return Appointment.findByPk(appointment.id, { include: appointmentDetailIncludes });
 }
 
+async function assertProfessionalOwnership(requester: Requester, appointment: Appointment) {
+  if (requester.role === 'professional') {
+    const professional = await Professional.findOne({ where: { userId: requester.id } });
+    if (!professional || professional.id !== appointment.professionalId) {
+      throw new HttpError(403, 'No podés modificar un turno que no es tuyo');
+    }
+  }
+}
+
+export async function completeAppointment(requester: Requester, appointmentId: string) {
+  const appointment = await Appointment.findByPk(appointmentId);
+  if (!appointment) {
+    throw new HttpError(404, 'Turno no encontrado');
+  }
+  if (appointment.status !== 'confirmed') {
+    throw new HttpError(400, `Este turno no se puede marcar como atendido (estado actual: ${appointment.status})`);
+  }
+  await assertProfessionalOwnership(requester, appointment);
+
+  await appointment.update({ status: 'completed' });
+  return Appointment.findByPk(appointment.id, { include: appointmentDetailIncludes });
+}
+
+export async function markNoShow(requester: Requester, appointmentId: string) {
+  const appointment = await Appointment.findByPk(appointmentId);
+  if (!appointment) {
+    throw new HttpError(404, 'Turno no encontrado');
+  }
+  if (appointment.status !== 'confirmed') {
+    throw new HttpError(400, `Este turno no se puede marcar como no asistido (estado actual: ${appointment.status})`);
+  }
+  if (appointment.endDatetime.getTime() > Date.now()) {
+    throw new HttpError(400, 'Todavía no terminó el turno');
+  }
+  await assertProfessionalOwnership(requester, appointment);
+
+  await appointment.update({ status: 'no_show' });
+  return Appointment.findByPk(appointment.id, { include: appointmentDetailIncludes });
+}
+
 export async function markAsPaid(appointmentId: string, paymentMethod?: string) {
   const appointment = await Appointment.findByPk(appointmentId);
   if (!appointment) {

@@ -1,4 +1,4 @@
-import { Building2, CalendarClock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Building2, CalendarClock, ChevronLeft, ChevronRight, ChevronsUpDown } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { navSections } from '../../lib/navConfig';
@@ -13,20 +13,22 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   if (!user) return null;
 
   const sections = navSections[user.role];
+  const pinnedSection = sections[sections.length - 1];
+  const scrollSections = sections.slice(0, -1);
 
   return (
     <aside
-      className={`flex shrink-0 flex-col border-r border-gray-200 bg-white transition-[width] duration-200 dark:border-gray-800 dark:bg-gray-900 ${
-        collapsed ? 'w-[76px]' : 'w-64'
+      className={`flex shrink-0 flex-col border-r border-[#eaecef] bg-white transition-[width] duration-200 ${
+        collapsed ? 'w-[76px]' : 'w-[264px]'
       }`}
     >
-      <div className="flex items-center justify-between gap-2 border-b border-gray-200 px-4 py-4 dark:border-gray-800">
-        <Link to="/" className="flex min-w-0 items-center gap-2">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white">
-            <CalendarClock className="h-4.5 w-4.5" />
+      <div className="flex items-center justify-between gap-2 px-2.5 py-4">
+        <Link to="/inicio" className="flex min-w-0 items-center gap-2.5">
+          <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[10px] bg-gradient-to-br from-[#6a58f2] to-[#4b39d6] text-white">
+            <CalendarClock className="h-5 w-5" />
           </span>
           {!collapsed && (
-            <span className="truncate text-base font-semibold text-gray-900 dark:text-gray-100">
+            <span className="truncate text-[15.5px] font-extrabold tracking-tight text-[#171a1f]">
               Sistema de Turnos
             </span>
           )}
@@ -34,7 +36,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <button
           type="button"
           onClick={onToggle}
-          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[#9aa1ac] hover:bg-[#f4f5f7]"
           aria-label={collapsed ? 'Expandir menú' : 'Colapsar menú'}
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -42,22 +44,26 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </div>
 
       {!collapsed && (
-        <div className="mx-3 mt-4 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2.5 dark:border-gray-800">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
-            <Building2 className="h-4 w-4" />
+        <button
+          type="button"
+          className="mx-4 mt-1 flex items-center gap-2.5 rounded-xl border border-[#eaecef] bg-[#fbfbfc] px-3 py-2.5 text-left hover:bg-[#f4f5f7]"
+        >
+          <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[9px] bg-[#eef0fe] text-[#5847eb]">
+            <Building2 className="h-[18px] w-[18px]" />
           </span>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">Clínica Dental Sonrisas</p>
-            <p className="truncate text-xs text-gray-500 dark:text-gray-400">Av. Rivadavia 1234, CABA</p>
-          </div>
-        </div>
+          <span className="min-w-0 leading-tight">
+            <span className="block truncate text-[13.5px] font-bold text-[#171a1f]">Clínica Dental Sonrisas</span>
+            <span className="block truncate text-[11.5px] text-[#8a919c]">Av. Rivadavia 1234, CABA</span>
+          </span>
+          <ChevronsUpDown className="ml-auto h-[16px] w-[16px] shrink-0 text-[#b8bec7]" />
+        </button>
       )}
 
-      <nav className="flex-1 space-y-5 overflow-y-auto px-3 py-4">
-        {sections.map((section, i) => (
+      <nav className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
+        {scrollSections.map((section, i) => (
           <div key={i}>
             {section.title && !collapsed && (
-              <p className="mb-1.5 px-3 text-[11px] font-semibold tracking-wide text-gray-400 uppercase dark:text-gray-500">
+              <p className="mb-1.5 px-3 pt-1.5 text-[10.5px] font-bold tracking-[.09em] text-[#9aa1ac] uppercase">
                 {section.title}
               </p>
             )}
@@ -68,16 +74,16 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     key={item.label}
                     to={item.to}
                     title={collapsed ? item.label : undefined}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 dark:text-gray-500 dark:hover:bg-gray-800/60 ${
+                    className={`flex items-center gap-3 rounded-[11px] px-3 py-2.5 text-sm font-medium text-[#aeb4bd] hover:bg-[#f4f5f7] ${
                       collapsed ? 'justify-center' : 'justify-between'
                     }`}
                   >
                     <span className="flex items-center gap-3">
-                      <item.icon className="h-[18px] w-[18px] shrink-0" />
+                      <item.icon className="h-5 w-5 shrink-0 text-[#c3c8d0]" />
                       {!collapsed && <span className="truncate">{item.label}</span>}
                     </span>
                     {!collapsed && (
-                      <span className="shrink-0 rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 uppercase dark:bg-gray-800">
+                      <span className="shrink-0 rounded-md bg-[#eef0f2] px-1.5 py-0.5 text-[9.5px] font-bold tracking-[.05em] text-[#98a0ab] uppercase">
                         Pronto
                       </span>
                     )}
@@ -89,17 +95,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     end={item.end}
                     title={collapsed ? item.label : undefined}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                      `flex items-center gap-3 rounded-[11px] px-3 py-2.5 text-sm font-medium transition ${
                         collapsed ? 'justify-center' : ''
                       } ${
                         isActive
-                          ? 'bg-indigo-600 text-white'
-                          : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                          ? 'bg-[#5847eb] text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.55)]'
+                          : 'text-[#4b535e] hover:bg-[#f4f5f7]'
                       }`
                     }
                   >
-                    <item.icon className="h-[18px] w-[18px] shrink-0" />
-                    {!collapsed && <span className="truncate">{item.label}</span>}
+                    {({ isActive }) => (
+                      <>
+                        <item.icon className={`h-5 w-5 shrink-0 ${isActive ? '' : 'text-[#8a919c]'}`} />
+                        {!collapsed && <span className="truncate">{item.label}</span>}
+                      </>
+                    )}
                   </NavLink>
                 )
               )}
@@ -107,6 +117,28 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </div>
         ))}
       </nav>
+
+      <div className="mt-auto border-t border-[#f0f1f3] px-4 py-3">
+        {pinnedSection.items.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            title={collapsed ? item.label : undefined}
+            className={({ isActive }) =>
+              `flex items-center gap-3 rounded-[11px] px-3 py-2.5 text-sm font-medium transition ${
+                collapsed ? 'justify-center' : ''
+              } ${isActive ? 'bg-[#5847eb] text-white' : 'text-[#4b535e] hover:bg-[#f4f5f7]'}`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <item.icon className={`h-5 w-5 shrink-0 ${isActive ? '' : 'text-[#8a919c]'}`} />
+                {!collapsed && <span className="truncate">{item.label}</span>}
+              </>
+            )}
+          </NavLink>
+        ))}
+      </div>
     </aside>
   );
 }

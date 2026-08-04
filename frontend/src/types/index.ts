@@ -13,12 +13,16 @@ export interface AuthResponse {
   user: User;
 }
 
+export const SERVICE_CATEGORIES = ['Consulta', 'Estética', 'Ortodoncia', 'Cirugía', 'Prevención'] as const;
+export type ServiceCategory = (typeof SERVICE_CATEGORIES)[number];
+
 export interface Service {
   id: string;
   name: string;
   description: string | null;
   durationMinutes: number;
   price: string;
+  category: ServiceCategory;
   active: boolean;
 }
 
@@ -78,6 +82,7 @@ export interface Appointment {
   professional?: {
     id: string;
     specialty: string | null;
+    color: string;
     user: { id: string; name: string; email: string; phone: string | null };
   };
   service?: {
@@ -85,6 +90,7 @@ export interface Appointment {
     name: string;
     durationMinutes: number;
     price: string;
+    category: ServiceCategory;
   };
   client?: {
     id: string;
@@ -124,7 +130,7 @@ export interface ClinicalRecord {
   professionalId: string;
   content: string;
   createdAt: string;
-  professional?: { id: string; user: { id: string; name: string } };
+  professional?: { id: string; specialty: string | null; color: string; user: { id: string; name: string } };
   patient?: { id: string; name: string };
 }
 

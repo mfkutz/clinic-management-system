@@ -1,0 +1,24 @@
+{
+  "name": "clinic-management-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently -n FRONT,BACK -c blue,green \"npm run dev --prefix front\" \"npm run dev --prefix backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mfkutz/clinic-management-system.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mfkutz/clinic-management-system/issues"
+  },
+  "homepage": "https://github.com/mfkutz/clinic-management-system#readme",
+  "dependencies": {
+    "concurrently": "^10.0.4"
+  }
+}
