@@ -1,6 +1,6 @@
 # Clinic Management System — CLAUDE.md
 
-Repo: `clinic-management-system`. Ver estado general del portfolio en `../PORTFOLIO.md`.
+Repo: `clinic-management-system`. Ver estado general del portfolio en el repo separado `workana-portfolio-tracker` (`../workana-portfolio-tracker/PORTFOLIO.md`, privado, github.com/mfkutz/workana-portfolio-tracker) — se movió ahí para poder sincronizarlo entre PCs con git en vez de copiarlo a mano.
 
 Empezó como un "sistema de turnos" genérico (el branding dentro de la app todavía dice "Sistema de Turnos") y fue creciendo hasta ser un sistema de gestión de clínica más completo — de ahí el nombre del repo, elegido a propósito para que se vea más competitivo en el portfolio que un simple booking system.
 
