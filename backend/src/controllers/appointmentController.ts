@@ -30,6 +30,11 @@ export async function cancel(req: Request, res: Response) {
   res.json(appointment);
 }
 
+export async function confirmAttendance(req: Request, res: Response) {
+  const appointment = await appointmentService.confirmAttendance(req.user!, req.params.id as string);
+  res.json(appointment);
+}
+
 export async function markAsPaid(req: Request, res: Response) {
   const data = markAsPaidSchema.parse(req.body ?? {});
   const appointment = await appointmentService.markAsPaid(req.params.id as string, data.paymentMethod);

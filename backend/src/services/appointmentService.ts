@@ -259,6 +259,22 @@ export async function markNoShow(requester: Requester, appointmentId: string) {
   return Appointment.findByPk(appointment.id, { include: appointmentDetailIncludes });
 }
 
+export async function confirmAttendance(requester: Requester, appointmentId: string) {
+  const appointment = await Appointment.findByPk(appointmentId);
+  if (!appointment) {
+    throw new HttpError(404, 'Turno no encontrado');
+  }
+  if (appointment.clientId !== requester.id) {
+    throw new HttpError(403, 'No podés confirmar un turno que no es tuyo');
+  }
+  if (appointment.status !== 'confirmed') {
+    throw new HttpError(400, `Este turno no se puede confirmar (estado actual: ${appointment.status})`);
+  }
+
+  await appointment.update({ confirmedByClient: true });
+  return Appointment.findByPk(appointment.id, { include: appointmentDetailIncludes });
+}
+
 export async function markAsPaid(appointmentId: string, paymentMethod?: string) {
   const appointment = await Appointment.findByPk(appointmentId);
   if (!appointment) {

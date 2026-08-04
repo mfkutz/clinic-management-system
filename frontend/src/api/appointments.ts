@@ -35,6 +35,11 @@ export async function cancel(id: string, reason?: string): Promise<Appointment> 
   return res.data;
 }
 
+export async function confirmAttendance(id: string): Promise<Appointment> {
+  const res = await apiClient.patch<Appointment>(`/appointments/${id}/confirm`);
+  return res.data;
+}
+
 export async function markAsPaid(id: string, paymentMethod?: string): Promise<Appointment> {
   const res = await apiClient.patch<Appointment>(`/appointments/${id}/pay`, { paymentMethod });
   return res.data;

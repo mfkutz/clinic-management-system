@@ -74,13 +74,15 @@ export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
       </div>
 
       <div className="ml-auto flex shrink-0 items-center gap-2.5">
-        <Link
-          to={primaryAction.to}
-          className="flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-4 py-2.5 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] hover:bg-[#4636cf]"
-        >
-          <Plus className="h-[19px] w-[19px]" />
-          {primaryAction.label}
-        </Link>
+        {primaryAction.to !== location.pathname && (
+          <Link
+            to={primaryAction.to}
+            className="flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-4 py-2.5 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] hover:bg-[#4636cf]"
+          >
+            <Plus className="h-[19px] w-[19px]" />
+            {primaryAction.label}
+          </Link>
+        )}
         <button
           type="button"
           title="Ayuda"

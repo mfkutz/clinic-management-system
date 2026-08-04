@@ -10,12 +10,16 @@ export function Layout() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   // Rutas ya rediseñadas sección por sección (handoff de Claude Design), que manejan sus propias
-  // cards en vez de depender del wrapper genérico de abajo. Algunas son solo para admin (su
-  // contenido en '/inicio' difiere por rol); '/agenda' es compartida entre admin y profesional.
-  const ADMIN_ONLY_FULL_BLEED_PATHS = ['/inicio', '/admin/servicios', '/admin/profesionales', '/reportes'];
+  // cards en vez de depender del wrapper genérico de abajo. '/inicio' cambia de contenido por rol
+  // (admin y client ya están rediseñados, professional todavía usa el saludo genérico).
+  const ADMIN_ONLY_FULL_BLEED_PATHS = ['/admin/servicios', '/admin/profesionales', '/reportes'];
+  const CLIENT_ONLY_FULL_BLEED_PATHS = ['/reservar', '/mis-turnos'];
   const SHARED_FULL_BLEED_PATHS = ['/agenda', '/historias-clinicas'];
+  const HOME_FULL_BLEED_ROLES = ['admin', 'client'];
   const isFullBleed =
+    (location.pathname === '/inicio' && !!user?.role && HOME_FULL_BLEED_ROLES.includes(user.role)) ||
     (user?.role === 'admin' && ADMIN_ONLY_FULL_BLEED_PATHS.includes(location.pathname)) ||
+    (user?.role === 'client' && CLIENT_ONLY_FULL_BLEED_PATHS.includes(location.pathname)) ||
     SHARED_FULL_BLEED_PATHS.includes(location.pathname) ||
     location.pathname.startsWith('/pacientes/');
 

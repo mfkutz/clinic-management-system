@@ -1,5 +1,7 @@
 import { Building2, CalendarClock, ChevronLeft, ChevronRight, ChevronsUpDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import * as appointmentsApi from '../../api/appointments';
 import { useAuthStore } from '../../stores/authStore';
 import { navSections } from '../../lib/navConfig';
 
@@ -10,6 +12,16 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const user = useAuthStore((s) => s.user);
+  const [upcomingCount, setUpcomingCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (user?.role !== 'client') return;
+    appointmentsApi
+      .listMine()
+      .then((appts) => setUpcomingCount(appts.filter((a) => a.status === 'confirmed').length))
+      .catch(() => {});
+  }, [user?.role]);
+
   if (!user) return null;
 
   const sections = navSections[user.role];
@@ -108,6 +120,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       <>
                         <item.icon className={`h-5 w-5 shrink-0 ${isActive ? '' : 'text-[#8a919c]'}`} />
                         {!collapsed && <span className="truncate">{item.label}</span>}
+                        {!collapsed && item.to === '/mis-turnos' && upcomingCount !== null && (
+                          <span
+                            className="ml-auto shrink-0 rounded-[20px] px-2 py-0.5 text-[11px] font-bold"
+                            style={isActive ? { background: 'rgba(255,255,255,.22)', color: '#fff' } : { background: '#eef0fe', color: '#5847eb' }}
+                          >
+                            {upcomingCount}
+                          </span>
+                        )}
                       </>
                     )}
                   </NavLink>

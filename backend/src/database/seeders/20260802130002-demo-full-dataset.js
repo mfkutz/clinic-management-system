@@ -387,6 +387,7 @@ module.exports = {
             payment_status: isPaid ? 'paid' : 'pending',
             payment_method: isPaid ? PAYMENT_METHODS[apptCounter % PAYMENT_METHODS.length] : null,
             paid_at: isPaid ? new Date(start.getTime() + 30 * 60000) : null,
+            confirmed_by_client: status !== 'cancelled',
             created_at: start,
             updated_at: start,
           });
@@ -432,6 +433,9 @@ module.exports = {
             payment_status: isPaid ? 'paid' : 'pending',
             payment_method: isPaid ? PAYMENT_METHODS[slotIndex % PAYMENT_METHODS.length] : null,
             paid_at: isPaid ? new Date(start.getTime() + 30 * 60000) : null,
+            // El turno restante de hoy queda deliberadamente "sin confirmar" para poder demostrar
+            // en vivo el botón "Confirmar asistencia" del hero de Inicio con el turno más inminente.
+            confirmed_by_client: false,
             created_at: start,
             updated_at: start,
           });
@@ -475,6 +479,9 @@ module.exports = {
           payment_status: 'pending',
           payment_method: null,
           paid_at: null,
+          // Mezcla realista: 2 de cada 3 turnos futuros ya confirmados por el paciente, el resto
+          // pendiente — así "Mis turnos"/Inicio muestran ambos estados en vez de uno solo.
+          confirmed_by_client: offset % 3 !== 0,
           created_at: now,
           updated_at: now,
         });

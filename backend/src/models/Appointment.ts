@@ -18,6 +18,7 @@ interface AppointmentAttributes {
   paymentStatus: PaymentStatus;
   paymentMethod: string | null;
   paidAt: Date | null;
+  confirmedByClient: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -32,6 +33,7 @@ type AppointmentCreationAttributes = Optional<
   | 'paymentStatus'
   | 'paymentMethod'
   | 'paidAt'
+  | 'confirmedByClient'
   | 'createdAt'
   | 'updatedAt'
 >;
@@ -53,6 +55,7 @@ export class Appointment
   declare paymentStatus: PaymentStatus;
   declare paymentMethod: string | null;
   declare paidAt: Date | null;
+  declare confirmedByClient: boolean;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 }
@@ -81,6 +84,7 @@ Appointment.init(
     },
     paymentMethod: { type: DataTypes.STRING, allowNull: true, field: 'payment_method' },
     paidAt: { type: DataTypes.DATE, allowNull: true, field: 'paid_at' },
+    confirmedByClient: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false, field: 'confirmed_by_client' },
   },
   {
     sequelize,

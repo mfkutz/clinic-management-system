@@ -110,6 +110,8 @@ export function AdminHomePage() {
   );
   const cobrosPendientesTotal = cobrosPendientes.reduce((sum, a) => sum + Number(a.amount ?? 0), 0);
 
+  const turnosSinConfirmar = appointments.filter((a) => a.status === 'confirmed' && !a.confirmedByClient);
+
   const recentCancelled = useMemo(
     () =>
       [...appointments]
@@ -191,15 +193,17 @@ export function AdminHomePage() {
       to: '/proximamente',
     });
   }
-  // Mock: no existe estado de "pendiente de confirmar" ni gestión de insumos en el sistema todavía.
-  alerts.push({
-    icon: MessageCircle,
-    title: '3 turnos sin confirmar',
-    meta: 'Enviar recordatorio por WhatsApp',
-    bg: '#fef4e8',
-    color: '#d97706',
-    to: '/proximamente',
-  });
+  if (turnosSinConfirmar.length > 0) {
+    alerts.push({
+      icon: MessageCircle,
+      title: `${turnosSinConfirmar.length} turno${turnosSinConfirmar.length === 1 ? '' : 's'} sin confirmar`,
+      meta: 'Ver en Agenda',
+      bg: '#fef4e8',
+      color: '#d97706',
+      to: '/agenda',
+    });
+  }
+  // Mock: no hay gestión de insumos en el sistema todavía.
   alerts.push({
     icon: Package,
     title: 'Insumo bajo: anestesia local',

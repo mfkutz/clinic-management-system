@@ -12,7 +12,7 @@ npx sequelize-cli db:seed:undo:all   # borrar todo lo cargado por seed (menos ad
 
 > Nota: `db:seed:undo:all` deshace ambos seeders, incluido el admin. Si solo querés
 > limpiar el dataset completo pero conservar el admin, usá:
-> `npx sequelize-cli db:seed --seed 20260802130002-demo-full-dataset.js --undo`
+> `npx sequelize-cli db:seed:undo --seed 20260802130002-demo-full-dataset.js`
 
 ## Admin
 

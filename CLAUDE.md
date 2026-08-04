@@ -424,6 +424,35 @@ El sistema no tenía puerta de entrada pública: `/` era directamente el dashboa
 - Limitación conocida (igual que `AdminHomePage`/`BillingPage`): como `GET /appointments/me` no pagina ni filtra por fecha, todo el cálculo es sobre el historial completo traído al cliente — funciona bien a la escala del dataset demo, no escalaría a un historial real de producción.
 - Verificado con Playwright como admin: los 3 rangos (7d/30d/Todo) recalculan correctamente KPIs, gráfico, desglose por estado, top servicios y ranking por profesional. Sin errores de consola, `tsc -b` y `oxlint` limpios.
 
+## Panel del paciente (rol "client") — handoff completo: Inicio, Reservar turno, Mis turnos
+
+Séptimo handoff de Claude Design (`design_handoff_paciente/`), esta vez cubriendo de una las 3 pantallas del rol `client`: `Inicio Cliente.dc.html`, `Reservar Turno.dc.html`, `Mis Turnos.dc.html`. Mismo criterio que las secciones anteriores del panel admin: pixel-perfect con los tokens/patrones ya establecidos, wireado a datos reales donde existía soporte, mock documentado donde no.
+
+**Decisión previa (preguntada al usuario, se eligió agregar de verdad):** el mockup depende de un estado "Sin confirmar" por turno (botón "Confirmar asistencia" que lo pasa a "Confirmado") que no existía en el modelo — todo turno nacía directamente en `confirmed`. Se agregó real:
+- Migración `20260804090001-add-confirmed-by-client-to-appointments.js` → columna `confirmed_by_client` (boolean, default `false`) en `appointments`.
+- `PATCH /api/appointments/:id/confirm` (solo `client`, solo sobre turno propio en estado `confirmed`) — `appointmentService.confirmAttendance`.
+- Seed actualizado con una mezcla realista (turnos pasados: confirmados salvo cancelados; turno restante de "hoy": sin confirmar a propósito para poder demostrar el botón en vivo; turnos futuros: 2 de cada 3 confirmados, el resto no).
+- De paso, se reemplazó el aviso mock "3 turnos sin confirmar" de `AdminHomePage` por el conteo real (`status: 'confirmed' && !confirmedByClient`), ahora linkeando a `/agenda`.
+
+**Reservar turno** (`BookingPage.tsx`, reescrito de cero): wizard de 5 pasos (Profesional → Servicio → Fecha → Horario → Confirmar) con stepper clickeable hacia atrás. La pieza más importante: el calendario mensual de disponibilidad es **100% real, sin regla determinística** — para cada día visible del mes (una vez elegidos profesional+servicio) se pide `GET /appointments/available-slots` real y el dot se pinta verde/ámbar/gris según la cantidad de horarios libres que devuelve (0 = gris, 1-2 = ámbar, 3+ = verde); no hizo falta ningún endpoint nuevo, solo N llamadas en paralelo por mes visible (cacheadas en memoria por `profesional:servicio:fecha`). Tope de "hasta 3 meses de anticipación" implementado con `monthOffset` 0..3, igual que el mockup. El paso 4 (horario) muestra únicamente los slots reales que devuelve el endpoint — a diferencia del mockup (grilla fija 08–15h con horarios "ocupados" simulados), aquí no hace falta simular nada porque el endpoint ya excluye los ocupados. "Reservar de nuevo" (desde Inicio/Mis turnos) precarga profesional+servicio vía query params (`?professionalId=&serviceId=`) y salta directo al paso 3.
+
+**Mis turnos** (`MyAppointmentsPage.tsx`, reescrito): tabs Próximos/Historial/Todos con conteos reales. Acciones reales: Confirmar (nuevo endpoint), Cancelar (ya existía), Reprogramar (compuesto con lo que ya había: cancela con motivo "Reprogramado por el paciente" + navega al wizard con el mismo profesional/servicio precargado — no hizo falta un endpoint de reprogramación dedicado). "Ver detalle" abre un drawer lateral (mismo patrón visual que los slide-overs del panel admin) con el detalle completo del turno, sin necesidad de endpoint nuevo (los datos ya están en la lista cargada).
+
+**Inicio del paciente** (`ClientHomePage.tsx`, nuevo, en `pages/client/`): hero del próximo turno con countdown real ("Hoy"/"Mañana"/"En N días"), lista de próximos turnos, "Para tener en cuenta" (el recordatorio de confirmar es real y solo aparece si hay un turno sin confirmar; el tip de "vení 10 minutos antes" es texto estático de política de la clínica, no un dato fabricado), acciones rápidas, "La clínica" y "Reservar de nuevo" (real: agrupa los turnos `completed` del paciente por par profesional+servicio, ordena por frecuencia y muestra los 3 más repetidos).
+
+**Mocks/simplificaciones documentadas:**
+- No existe noción de "consultorio"/sucursal en el modelo — se creó `src/lib/clinic.ts` con los datos reales de la única clínica (nombre/dirección/teléfono/horario) y se reusa esa dirección donde el mockup mostraba un "Consultorio 3" inventado, en vez de fabricar números de consultorio por turno.
+- "Cómo llegar" y "WhatsApp" son links reales y funcionales (`google.com/maps/search` con la dirección real, `wa.me` con el teléfono real) — no mockeados, a pesar de no requerir backend.
+- El mapa en "La clínica" se reemplazó por un iframe real de Google Maps (`src/lib/clinic.ts` → `clinicMapEmbedUrl()`, modo `output=embed`, sin API key ni costo) apuntando a la dirección real de la clínica — el usuario pidió específicamente sacarle el placeholder rayado porque es lo más visible en una captura de portfolio.
+- "Mi historial" y "Mis datos" (acciones rápidas de Inicio) apuntan a `/proximamente` — no existe una vista de historia clínica ni de edición de perfil para el rol cliente todavía.
+- El badge de conteo "Mis turnos" en el sidebar (`Sidebar.tsx`) es real pero se calcula con un fetch propio y liviano al montar el shell (no hay store global de turnos) — no se refresca solo si reservás/cancelás un turno sin recargar de sección; ídem para consistencia entre pestañas.
+
+**Refactors/ajustes de paso:**
+- `Layout.tsx`: el full-bleed de `/inicio` pasó a depender del rol (`admin`/`client`, no `professional` todavía) en vez de ser un path fijo; se agregaron `/reservar` y `/mis-turnos` como full-bleed para `client`.
+- `TopHeader.tsx`: el botón primario de acción ahora se oculta cuando ya estás en su propia página de destino (antes se mostraba siempre, incluso redundante en `/reservar` sobre el propio wizard).
+- `src/lib/clientAppointmentStatus.ts` (nuevo): badges de estado para las 3 pantallas del paciente (`Sin confirmar`/`Confirmado`/`Atendido`/`Cancelado`/`No asistido`) — deliberadamente **distinto** de `appointmentStatusMeta.ts` (el del panel admin), porque el mockup del paciente define colores diferentes para "Atendido" (gris, no verde) y necesita el sub-estado `confirmedByClient` que no aplica al admin.
+- Verificado con Playwright como cliente (flujo completo: confirmar asistencia, ver detalle, navegar las 3 pestañas de Mis turnos, wizard completo de reserva de punta a punta creando un turno real) y regresión rápida en admin/profesional para confirmar que no se rompió nada. `tsc -b`/`tsc --noEmit` (front y back) y `oxlint` limpios.
+
 ## Roadmap técnico (próximos pasos)
 
 1. ~~Refactor a capa de servicio en todos los módulos (backend).~~ ✅

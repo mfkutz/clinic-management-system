@@ -1,5 +1,6 @@
 import { useAuthStore } from '../stores/authStore';
 import { AdminHomePage } from './admin/AdminHomePage';
+import { ClientHomePage } from './client/ClientHomePage';
 
 const roleLabels = {
   admin: 'Administrador',
@@ -12,6 +13,10 @@ export function HomePage() {
 
   if (user?.role === 'admin') {
     return <AdminHomePage />;
+  }
+
+  if (user?.role === 'client') {
+    return <ClientHomePage />;
   }
 
   return (

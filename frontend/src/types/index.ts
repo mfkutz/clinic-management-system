@@ -79,6 +79,7 @@ export interface Appointment {
   paymentStatus: PaymentStatus;
   paymentMethod: string | null;
   paidAt: string | null;
+  confirmedByClient: boolean;
   professional?: {
     id: string;
     specialty: string | null;
