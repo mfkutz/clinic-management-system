@@ -90,14 +90,14 @@ export function ProfessionalHomePage() {
   if (error) return <p className="p-7 text-sm text-red-600">{error}</p>;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mb-[22px] flex flex-wrap items-end justify-between gap-5">
         <div>
           <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
             <Calendar className="h-[17px] w-[17px]" />
             {formatLongDateLabel(now)}
           </div>
-          <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">Hola, {user?.name.split(' ')[0]} 👋</h2>
+          <h2 className="mt-[7px] mb-[5px] text-[21px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[26px]">Hola, {user?.name.split(' ')[0]} 👋</h2>
           <p className="m-0 text-[14px] text-[#6b7480]">
             Tenés <b className="text-[#171a1f]">{todayAppts.length} turnos</b>
             {pendingToday.length > 0 && (
@@ -118,48 +118,48 @@ export function ProfessionalHomePage() {
         </Link>
       </div>
 
-      <div className="mb-5 grid grid-cols-4 gap-4">
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#eef0fe] text-[#5847eb]">
-            <Calendar className="h-[23px] w-[23px]" />
+      <div className="mb-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11 bg-[#eef0fe] text-[#5847eb]">
+            <Calendar className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{todayAppts.length}</div>
-            <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Turnos hoy</div>
+          <div className="min-w-0">
+            <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{todayAppts.length}</div>
+            <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">Turnos hoy</div>
           </div>
         </div>
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#eaf7ef] text-[#16a34a]">
-            <PieChart className="h-[23px] w-[23px]" />
+        <div className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11 bg-[#eaf7ef] text-[#16a34a]">
+            <PieChart className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">
+          <div className="min-w-0">
+            <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">
               {completedToday.length}/{todayAppts.length}
             </div>
-            <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Atendidos hoy</div>
+            <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">Atendidos hoy</div>
           </div>
         </div>
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#fdecec] text-[#dc2626]">
-            <UserX className="h-[23px] w-[23px]" />
+        <div className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11 bg-[#fdecec] text-[#dc2626]">
+            <UserX className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{ausentismoRate}%</div>
-            <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Ausentismo (7 días)</div>
+          <div className="min-w-0">
+            <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{ausentismoRate}%</div>
+            <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">Ausentismo (7 días)</div>
           </div>
         </div>
-        <div className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#fef4e8] text-[#d97706]">
-            <CalendarRange className="h-[23px] w-[23px]" />
+        <div className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11 bg-[#fef4e8] text-[#d97706]">
+            <CalendarRange className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{weekAppts.length}</div>
-            <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Turnos esta semana</div>
+          <div className="min-w-0">
+            <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{weekAppts.length}</div>
+            <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">Turnos esta semana</div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-[1.7fr_1fr] items-start gap-5">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.7fr_1fr]">
         <div className="flex flex-col gap-5">
           <section className="overflow-hidden rounded-[18px] border border-[#eaecef] bg-white">
             <div className="flex items-center gap-[11px] border-b border-[#f0f1f3] px-5 pt-[18px] pb-3.5">
@@ -220,8 +220,8 @@ export function ProfessionalHomePage() {
             </div>
           </section>
 
-          <section className="rounded-[18px] border border-[#eaecef] bg-white px-[22px] pt-[18px] pb-5">
-            <div className="mb-1.5 flex items-center justify-between">
+          <section className="rounded-[18px] border border-[#eaecef] bg-white px-4 pt-[18px] pb-5 sm:px-[22px]">
+            <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Turnos de la semana</h3>
                 <p className="mt-1 mb-0 text-[12.5px] text-[#8a919c]">Atendidos vs. programados · últimos 7 días</p>

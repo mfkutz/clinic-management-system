@@ -126,7 +126,7 @@ function FormPanel({ state, services, onCreate, onUpdate, onClose }: FormPanelPr
           )}
 
           {isEdit ? (
-            <div className="grid grid-cols-2 gap-3.5 text-[13.5px]">
+            <div className="grid grid-cols-1 gap-3.5 text-[13.5px] sm:grid-cols-2">
               <div>
                 <div className="mb-[7px] text-[12.5px] font-bold text-[#4b535e]">Nombre</div>
                 <div className="rounded-[11px] border border-[#eef0f2] bg-[#f4f5f7] px-[13px] py-[11px] text-[#8a919c]">
@@ -141,7 +141,7 @@ function FormPanel({ state, services, onCreate, onUpdate, onClose }: FormPanelPr
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3.5">
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
               <div>
                 <label className="mb-[7px] block text-[12.5px] font-bold text-[#4b535e]">Nombre completo</label>
                 <input
@@ -624,7 +624,7 @@ export function AdminProfessionalsPage() {
   if (loading) return <p className="p-7 text-sm text-gray-500">Cargando…</p>;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       {form && (
         <FormPanel state={form} services={services} onCreate={handleCreate} onUpdate={handleUpdate} onClose={() => setForm(null)} />
       )}
@@ -663,20 +663,20 @@ export function AdminProfessionalsPage() {
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
       {/* KPI STRIP */}
-      <div className="mb-[22px] grid grid-cols-4 gap-4">
+      <div className="mb-[22px] grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {[
           { icon: Users, value: String(professionals.length), label: 'Profesionales', bg: '#eef0fe', color: '#5847eb' },
           { icon: CheckCircle2, value: String(professionals.length - inactiveCount), label: 'Activos', bg: '#eaf7ef', color: '#16a34a' },
           { icon: Calendar, value: String(weekTotal), label: 'Turnos esta semana', bg: '#fef4e8', color: '#d97706' },
           { icon: Stethoscope, value: String(specialtyCounts.size), label: 'Especialidades', bg: '#eef7f2', color: '#0f9d63' },
         ].map((k) => (
-          <div key={k.label} className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ background: k.bg, color: k.color }}>
-              <k.icon className="h-[23px] w-[23px]" />
+          <div key={k.label} className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11" style={{ background: k.bg, color: k.color }}>
+              <k.icon className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
             </span>
-            <div>
-              <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{k.value}</div>
-              <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">{k.label}</div>
+            <div className="min-w-0">
+              <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{k.value}</div>
+              <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">{k.label}</div>
             </div>
           </div>
         ))}
@@ -770,7 +770,7 @@ export function AdminProfessionalsPage() {
       <div
         className={
           view === 'grid'
-            ? 'grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-[18px]'
+            ? 'grid grid-cols-[repeat(auto-fill,minmax(min(400px,100%),1fr))] gap-[18px]'
             : 'flex flex-col gap-2.5'
         }
       >

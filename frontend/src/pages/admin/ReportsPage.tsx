@@ -156,7 +156,7 @@ export function ReportsPage() {
   const professionalMaxRevenue = Math.max(1, ...professionalPerformance.map((p) => p.revenue));
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       {/* HEADER */}
       <div className="mb-[22px] flex flex-wrap items-end justify-between gap-5">
         <div>
@@ -193,7 +193,7 @@ export function ReportsPage() {
       </div>
 
       {/* KPI ROW */}
-      <div className="mb-5 grid grid-cols-5 gap-4">
+      <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
         <KpiCard
           icon={STATUS_META.completed.icon}
           iconBg="#eef7f2"
@@ -244,11 +244,11 @@ export function ReportsPage() {
       </div>
 
       {/* MAIN GRID */}
-      <div className="grid grid-cols-[1.6fr_1fr] items-start gap-5">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.6fr_1fr]">
         {/* LEFT COLUMN */}
         <div className="flex flex-col gap-5">
           {/* INGRESOS */}
-          <section className="rounded-[18px] border border-[#eaecef] bg-white px-[22px] pt-[18px] pb-5">
+          <section className="rounded-[18px] border border-[#eaecef] bg-white px-4 pt-[18px] pb-5 sm:px-[22px]">
             <div className="mb-1.5">
               <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Ingresos por día</h3>
               <p className="mt-1 mb-0 text-[12.5px] text-[#8a919c]">Cobrado por día · {RANGE_LABELS[range].toLowerCase()}</p>
@@ -400,21 +400,21 @@ interface KpiCardProps {
 
 function KpiCard({ icon: Icon, iconBg, iconColor, value, label, delta, deltaIcon: DeltaIcon, deltaColor }: KpiCardProps) {
   return (
-    <div className="flex flex-col gap-[13px] rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
+    <div className="flex flex-col gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-[13px] sm:px-[18px] sm:py-[17px]">
       <div className="flex items-center justify-between">
-        <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px]" style={{ background: iconBg, color: iconColor }}>
-          <Icon className="h-[21px] w-[21px]" />
+        <span className="flex h-8 w-8 items-center justify-center rounded-[11px] sm:h-[38px] sm:w-[38px]" style={{ background: iconBg, color: iconColor }}>
+          <Icon className="h-[18px] w-[18px] sm:h-[21px] sm:w-[21px]" />
         </span>
         {delta && DeltaIcon && (
-          <span className="flex items-center gap-[3px] text-[12px] font-bold" style={{ color: deltaColor }}>
+          <span className="flex items-center gap-[3px] text-[11.5px] font-bold sm:text-[12px]" style={{ color: deltaColor }}>
             <DeltaIcon className="h-[15px] w-[15px]" />
             {delta}
           </span>
         )}
       </div>
-      <div>
-        <div className="text-[22px] font-extrabold tracking-[-.6px] text-[#171a1f]">{value}</div>
-        <div className="mt-1.5 text-[12.5px] font-semibold text-[#8a919c]">{label}</div>
+      <div className="min-w-0">
+        <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[22px]">{value}</div>
+        <div className="mt-1.5 text-[11.5px] font-semibold text-[#8a919c] sm:text-[12.5px]">{label}</div>
       </div>
     </div>
   );

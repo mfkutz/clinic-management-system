@@ -136,12 +136,12 @@ export function MyAppointmentsPage() {
   const empty = EMPTY_STATE[tab];
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mx-auto max-w-[920px]">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="m-0 mb-1 text-[24px] font-extrabold tracking-[-.5px] text-[#171a1f]">Mis turnos</h2>
-            <p className="m-0 text-[14px] text-[#6b7480]">Gestioná tus próximas citas y revisá tu historial.</p>
+            <h2 className="m-0 mb-1 text-[20px] font-extrabold tracking-[-.5px] text-[#171a1f] sm:text-[24px]">Mis turnos</h2>
+            <p className="m-0 text-[13.5px] text-[#6b7480] sm:text-[14px]">Gestioná tus próximas citas y revisá tu historial.</p>
           </div>
           <button
             type="button"
@@ -153,7 +153,7 @@ export function MyAppointmentsPage() {
           </button>
         </div>
 
-        <div className="mb-[22px] flex items-center gap-1 border-b border-[#eaecef]">
+        <div className="mb-[22px] flex items-center gap-1 overflow-x-auto border-b border-[#eaecef]">
           {(
             [
               { id: 'upcoming' as Tab, label: 'Próximos', count: upcoming.length },
@@ -167,7 +167,7 @@ export function MyAppointmentsPage() {
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className="-mb-px flex items-center gap-2 px-3.5 py-2.5 text-[14px] font-bold hover:text-[#4b535e]"
+                className="-mb-px flex shrink-0 items-center gap-2 px-2.5 py-2.5 text-[13px] font-bold hover:text-[#4b535e] sm:px-3.5 sm:text-[14px]"
                 style={{ color: active ? '#171a1f' : '#9aa1ac', borderBottom: `2.5px solid ${active ? '#5847eb' : 'transparent'}` }}
               >
                 {t.label}
@@ -242,30 +242,40 @@ function AppointmentCard({ appointment: a, busy, onConfirm, onCancel, onReprogra
 
   return (
     <div
-      className="flex items-center gap-[18px] rounded-2xl border border-[#eaecef] bg-white p-[18px] px-5 hover:border-[#e2ddf9]"
+      className="flex flex-col gap-3.5 rounded-2xl border border-[#eaecef] bg-white p-4 hover:border-[#e2ddf9] sm:flex-row sm:items-center sm:gap-[18px] sm:p-[18px] sm:px-5"
       style={{ opacity: a.status === 'cancelled' ? 0.92 : 1 }}
     >
-      <div
-        className="w-[66px] shrink-0 rounded-[14px] py-[11px] text-center"
-        style={{ background: isUpcoming ? '#f3f1fe' : '#f4f5f7' }}
-      >
-        <div className="text-[11px] font-bold tracking-[.05em]" style={{ color: isUpcoming ? '#5847eb' : '#a3a9b2' }}>
-          {monthShort(a.startDatetime)}
+      <div className="flex items-center gap-3.5 sm:contents">
+        <div
+          className="w-[58px] shrink-0 rounded-[14px] py-2 text-center sm:w-[66px] sm:py-[11px]"
+          style={{ background: isUpcoming ? '#f3f1fe' : '#f4f5f7' }}
+        >
+          <div className="text-[10.5px] font-bold tracking-[.05em] sm:text-[11px]" style={{ color: isUpcoming ? '#5847eb' : '#a3a9b2' }}>
+            {monthShort(a.startDatetime)}
+          </div>
+          <div className="my-px text-[22px] font-extrabold leading-none sm:text-[26px]" style={{ color: isUpcoming ? '#5847eb' : '#4b535e' }}>
+            {dayNum(a.startDatetime)}
+          </div>
+          <div className="text-[10px] font-semibold text-[#8a919c] sm:text-[10.5px]">{dowShort(a.startDatetime)}</div>
         </div>
-        <div className="my-px text-[26px] font-extrabold leading-none" style={{ color: isUpcoming ? '#5847eb' : '#4b535e' }}>
-          {dayNum(a.startDatetime)}
+
+        <div
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[13px] text-[13.5px] font-bold text-white sm:h-[46px] sm:w-[46px] sm:text-[15px]"
+          style={{ background: proColor }}
+        >
+          {getInitials(proName)}
         </div>
-        <div className="text-[10.5px] font-semibold text-[#8a919c]">{dowShort(a.startDatetime)}</div>
+
+        <div className="min-w-0 flex-1 sm:hidden">
+          <div className="truncate text-[14.5px] font-extrabold tracking-[-.2px] text-[#171a1f]">{a.service?.name ?? 'Servicio'}</div>
+          <div className="mt-0.5 flex items-center gap-1.5 truncate text-[12px] text-[#6b7480]">
+            <Clock className="h-3.5 w-3.5 shrink-0 text-[#a3a9b2]" />
+            {timeLabel(a.startDatetime)} hs · {proName}
+          </div>
+        </div>
       </div>
 
-      <div
-        className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-[13px] text-[15px] font-bold text-white"
-        style={{ background: proColor }}
-      >
-        {getInitials(proName)}
-      </div>
-
-      <div className="min-w-0 flex-1">
+      <div className="hidden min-w-0 flex-1 sm:block">
         <div className="text-[15.5px] font-extrabold tracking-[-.2px] text-[#171a1f]">{a.service?.name ?? 'Servicio'}</div>
         <div className="mt-1.5 flex flex-wrap items-center gap-4">
           <span className="flex items-center gap-1.5 text-[12.5px] text-[#6b7480]">
@@ -286,7 +296,11 @@ function AppointmentCard({ appointment: a, busy, onConfirm, onCancel, onReprogra
         )}
       </div>
 
-      <div className="flex shrink-0 flex-col items-end gap-2.5">
+      {a.status === 'cancelled' && a.cancellationReason && (
+        <p className="text-[12px] text-[#dc2626] italic sm:hidden">Motivo: {a.cancellationReason}</p>
+      )}
+
+      <div className="flex flex-wrap items-center justify-between gap-2.5 sm:shrink-0 sm:flex-col sm:items-end">
         <span
           className="flex items-center gap-1.5 rounded-[20px] px-3 py-1.5 text-[12px] font-bold"
           style={{ background: meta.bg, color: meta.color }}
@@ -294,7 +308,7 @@ function AppointmentCard({ appointment: a, busy, onConfirm, onCancel, onReprogra
           <meta.icon className="h-[15px] w-[15px]" />
           {meta.label}
         </span>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {badge === 'unconfirmed' && (
             <ActionButton icon={Check} label="Confirmar" solid disabled={busy} onClick={onConfirm} />
           )}
@@ -357,7 +371,7 @@ function DetailDrawer({ appointment: a, onClose }: { appointment: Appointment; o
   return (
     <div className="fixed inset-0 z-30 flex justify-end">
       <div className="absolute inset-0 bg-[rgba(23,26,31,.34)] backdrop-blur-[2px]" onClick={onClose} />
-      <div className="relative flex h-full w-[400px] flex-col bg-white shadow-2xl">
+      <div className="relative flex h-full w-full max-w-[400px] flex-col bg-white shadow-2xl">
         <div className="flex items-center gap-3 border-b border-[#f0f1f3] px-5 py-[18px]">
           <span className="flex h-10 w-10 items-center justify-center rounded-[11px] bg-[#eef0fe] text-[#5847eb]">
             <Stethoscope className="h-5 w-5" />

@@ -207,7 +207,7 @@ export function BookingPage() {
 
   if (confirmed) {
     return (
-      <div className="mx-auto max-w-md px-6 py-24 text-center">
+      <div className="mx-auto max-w-md px-6 py-16 text-center sm:py-24">
         <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#eaf7ef] text-[#16a34a]">
           <CheckCircle2 className="h-8 w-8" />
         </div>
@@ -236,12 +236,28 @@ export function BookingPage() {
   }
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mx-auto mb-5 max-w-[1080px]">
-        <h2 className="m-0 mb-1 text-[24px] font-extrabold tracking-[-.5px] text-[#171a1f]">Reservá tu turno</h2>
-        <p className="m-0 mb-5 text-[14px] text-[#6b7480]">Seguí los pasos y confirmá. Te enviaremos un recordatorio antes de la cita.</p>
+        <h2 className="m-0 mb-1 text-[20px] font-extrabold tracking-[-.5px] text-[#171a1f] sm:text-[24px]">Reservá tu turno</h2>
+        <p className="m-0 mb-5 text-[13.5px] text-[#6b7480] sm:text-[14px]">Seguí los pasos y confirmá. Te enviaremos un recordatorio antes de la cita.</p>
 
-        <div className="flex items-center">
+        {/* Stepper compacto para mobile: barra de progreso + paso actual */}
+        <div className="sm:hidden">
+          <div className="mb-2 flex items-center justify-between text-[12.5px] font-bold text-[#171a1f]">
+            <span>
+              Paso {step} de {STEP_LABELS.length} · {STEP_LABELS[step - 1]}
+            </span>
+            <span className="text-[#9aa1ac]">{Math.round((step / STEP_LABELS.length) * 100)}%</span>
+          </div>
+          <div className="h-[6px] overflow-hidden rounded-[20px] bg-[#eef0f2]">
+            <div
+              className="h-full rounded-[20px] bg-[#5847eb] transition-[width]"
+              style={{ width: `${(step / STEP_LABELS.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="hidden items-center sm:flex">
           {STEP_LABELS.map((label, i) => {
             const n = i + 1;
             const done = step > n;
@@ -266,7 +282,7 @@ export function BookingPage() {
                   >
                     {done ? <Check className="h-[18px] w-[18px]" /> : n}
                   </span>
-                  <span className="flex flex-col items-start leading-tight">
+                  <span className="hidden flex-col items-start leading-tight md:flex">
                     <span className="text-[10px] font-bold tracking-[.05em] text-[#9aa1ac] uppercase">Paso {n}</span>
                     <span className="text-[13px] font-bold whitespace-nowrap" style={{ color: active || done ? '#171a1f' : '#9aa1ac' }}>
                       {label}
@@ -282,8 +298,8 @@ export function BookingPage() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-[1080px] grid-cols-[1fr_320px] items-start gap-5">
-        <section className="min-h-[400px] rounded-[18px] border border-[#eaecef] bg-white p-[22px]">
+      <div className="mx-auto grid max-w-[1080px] grid-cols-1 items-start gap-5 lg:grid-cols-[1fr_320px]">
+        <section className="min-h-[400px] rounded-[18px] border border-[#eaecef] bg-white p-4 sm:p-[22px]">
           {loadError && <p className="mb-4 text-sm text-red-600">{loadError}</p>}
 
           {step === 1 && (
@@ -295,7 +311,7 @@ export function BookingPage() {
               ) : professionals.length === 0 ? (
                 <p className="text-sm text-[#8a919c]">No hay profesionales disponibles todavía.</p>
               ) : (
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {professionals.map((p) => {
                     const sel = professionalId === p.id;
                     return (
@@ -338,7 +354,7 @@ export function BookingPage() {
             <div>
               <h3 className="m-0 mb-0.5 text-[17px] font-extrabold tracking-[-.3px] text-[#171a1f]">Elegí un servicio</h3>
               <p className="m-0 mb-4.5 text-[13px] text-[#8a919c]">Servicios que ofrece {selectedProfessional.user.name}.</p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {selectedProfessional.services.map((s) => {
                   const sel = serviceId === s.id;
                   const meta = CATEGORY_META[s.category];
@@ -402,7 +418,7 @@ export function BookingPage() {
               ) : daySlots.length === 0 ? (
                 <p className="text-sm text-[#8a919c]">No hay horarios libres ese día. Volvé al paso anterior y elegí otra fecha.</p>
               ) : (
-                <div className="grid grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-2.5">
                   {daySlots.map((slot) => {
                     const sel = time === slot.startTime;
                     return (
@@ -469,7 +485,7 @@ export function BookingPage() {
             )}
             <div className="ml-auto flex items-center gap-2.5">
               {!canAdvance(step) && (
-                <span className="text-[12.5px] text-[#a3a9b2]">
+                <span className="hidden text-[12.5px] text-[#a3a9b2] sm:inline">
                   {step === 1 && 'Elegí un profesional para continuar'}
                   {step === 2 && 'Elegí un servicio'}
                   {step === 3 && 'Elegí una fecha'}
@@ -480,7 +496,7 @@ export function BookingPage() {
                 type="button"
                 disabled={!canAdvance(step) || booking}
                 onClick={() => (step === 5 ? handleConfirm() : setStep((s) => s + 1))}
-                className="flex items-center gap-1.5 rounded-[11px] px-[18px] py-2.5 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] disabled:cursor-not-allowed disabled:opacity-70"
+                className="flex items-center gap-1.5 rounded-[11px] px-3 py-2.5 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] disabled:cursor-not-allowed disabled:opacity-70 sm:px-[18px]"
                 style={{ background: canAdvance(step) ? '#5847eb' : '#c7c2f0' }}
               >
                 {step === 5 ? (booking ? 'Confirmando…' : 'Confirmar turno') : 'Continuar'}
@@ -490,7 +506,7 @@ export function BookingPage() {
           </div>
         </section>
 
-        <aside className="sticky top-0 overflow-hidden rounded-[18px] border border-[#eaecef] bg-white">
+        <aside className="overflow-hidden rounded-[18px] border border-[#eaecef] bg-white lg:sticky lg:top-0">
           <div className="flex items-center gap-2.5 border-b border-[#f0f1f3] px-[18px] py-3.5">
             <Receipt className="h-[21px] w-[21px] text-[#5847eb]" />
             <h3 className="m-0 text-[15px] font-extrabold tracking-[-.2px] text-[#171a1f]">Tu turno</h3>
@@ -619,7 +635,7 @@ function CalendarStep({
           );
         })}
       </div>
-      <div className="mt-4 flex gap-4.5 text-[11.5px] font-semibold text-[#8a919c]">
+      <div className="mt-4 flex flex-wrap gap-3 text-[11.5px] font-semibold text-[#8a919c] sm:gap-4.5">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-[7px] w-[7px] rounded-full bg-[#16a34a]" />
           Con turnos

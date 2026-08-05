@@ -157,6 +157,10 @@ export async function createAppointment(clientId: string, input: CreateAppointme
           endDatetime,
           notes: input.notes ?? null,
           amount: price,
+          // Reservar es la única forma de crear un turno en este sistema (self-service, sin
+          // intervención de recepción) — el propio acto de reservar ya es la confirmación del
+          // paciente, así que no tiene sentido pedirle que confirme de nuevo lo que acaba de elegir.
+          confirmedByClient: true,
         },
         { transaction }
       );

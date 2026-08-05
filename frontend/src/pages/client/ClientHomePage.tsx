@@ -165,7 +165,7 @@ export function ClientHomePage() {
   ];
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mb-[22px]">
         <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
           <Calendar className="h-[17px] w-[17px]" />
@@ -181,15 +181,15 @@ export function ClientHomePage() {
 
       {actionError && <p className="mb-4 text-sm text-red-600">{actionError}</p>}
 
-      <div className="grid grid-cols-[1.7fr_1fr] items-start gap-5">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.7fr_1fr]">
         <div className="flex flex-col gap-5">
           {next ? (
             <section
               className="overflow-hidden rounded-[20px] text-white shadow-[0_18px_40px_-18px_rgba(88,71,235,.6)]"
               style={{ background: 'linear-gradient(135deg,#5f4df0,#4a38d4)' }}
             >
-              <div className="px-6 pt-[22px] pb-5">
-                <div className="mb-[18px] flex items-center justify-between">
+              <div className="px-4 pt-[22px] pb-5 sm:px-6">
+                <div className="mb-[18px] flex flex-wrap items-center gap-2 justify-between">
                   <span className="flex items-center gap-2 text-[12px] font-extrabold tracking-[.08em] text-[#d6d0fb] uppercase">
                     <span
                       className="inline-block h-[7px] w-[7px] rounded-full bg-[#8fffc4]"
@@ -201,15 +201,15 @@ export function ClientHomePage() {
                     {countdownLabel(nextDiffDays)}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-5">
+                <div className="flex flex-wrap items-center gap-4 sm:gap-5">
                   <div className="w-[70px] shrink-0 rounded-2xl bg-[rgba(255,255,255,.14)] px-2 py-3 text-center">
                     <div className="text-[11.5px] font-bold tracking-[.05em] text-[#d6d0fb] uppercase">{monthShort(next.startDatetime)}</div>
                     <div className="my-0.5 text-[30px] font-extrabold leading-[1.05]">{dayNum(next.startDatetime)}</div>
                     <div className="text-[11.5px] font-semibold text-[#d6d0fb]">{dowLong(next.startDatetime)}</div>
                   </div>
-                  <div className="min-w-[200px] flex-1">
-                    <div className="flex items-center gap-2.5 text-[22px] font-extrabold tracking-[-.4px]">
-                      <Clock className="h-6 w-6" />
+                  <div className="min-w-[160px] flex-1 sm:min-w-[200px]">
+                    <div className="flex items-center gap-2.5 text-[18px] font-extrabold tracking-[-.4px] sm:text-[22px]">
+                      <Clock className="h-6 w-6 shrink-0" />
                       {timeLabel(next.startDatetime)} · {next.service?.name ?? 'Servicio'}
                     </div>
                     <div className="mt-2.5 flex flex-col gap-1.5 text-[13.5px] text-[#e6e3fb]">
@@ -226,7 +226,7 @@ export function ClientHomePage() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2.5 px-6 pb-[22px]">
+              <div className="flex flex-wrap gap-2.5 px-4 pb-[22px] sm:px-6">
                 {!next.confirmedByClient && (
                   <button
                     type="button"
@@ -285,10 +285,10 @@ export function ClientHomePage() {
           )}
 
           <section className="overflow-hidden rounded-[18px] border border-[#eaecef] bg-white">
-            <div className="flex items-center justify-between border-b border-[#f0f1f3] px-5 pt-[18px] pb-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#f0f1f3] px-4 pt-[18px] pb-3.5 sm:px-5">
               <div className="flex items-center gap-2.5">
                 <Calendar className="h-[22px] w-[22px] text-[#5847eb]" />
-                <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Mis próximos turnos</h3>
+                <h3 className="m-0 text-[15px] font-extrabold tracking-[-.3px] text-[#171a1f] sm:text-[16px]">Mis próximos turnos</h3>
                 <span className="rounded-[20px] bg-[#eef0fe] px-[9px] py-[3px] text-[12px] font-bold text-[#5847eb]">{upcoming.length}</span>
               </div>
               <Link to="/mis-turnos" className="text-[12.5px] font-bold text-[#5847eb] hover:text-[#4636cf]">
@@ -304,12 +304,12 @@ export function ClientHomePage() {
                 return (
                   <div
                     key={a.id}
-                    className="flex items-center gap-[15px] border-b border-[#f4f5f7] px-5 py-3.5 hover:bg-[#fafbfc]"
+                    className="flex items-center gap-2.5 border-b border-[#f4f5f7] px-3.5 py-3.5 hover:bg-[#fafbfc] sm:gap-[15px] sm:px-5"
                     style={{ borderLeft: `3px solid ${meta.color}` }}
                   >
-                    <div className="w-14 shrink-0 text-center">
-                      <div className="text-[12px] font-bold tracking-[.03em] text-[#a3a9b2] uppercase">{monthShort(a.startDatetime)}</div>
-                      <div className="text-[19px] font-extrabold leading-[1.05] tracking-[-.3px] text-[#171a1f]">{dayNum(a.startDatetime)}</div>
+                    <div className="w-11 shrink-0 text-center sm:w-14">
+                      <div className="text-[11px] font-bold tracking-[.03em] text-[#a3a9b2] uppercase sm:text-[12px]">{monthShort(a.startDatetime)}</div>
+                      <div className="text-[17px] font-extrabold leading-[1.05] tracking-[-.3px] text-[#171a1f] sm:text-[19px]">{dayNum(a.startDatetime)}</div>
                     </div>
                     {catMeta && (
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ background: catMeta.bg, color: catMeta.color }}>
@@ -317,15 +317,20 @@ export function ClientHomePage() {
                       </span>
                     )}
                     <div className="min-w-0 flex-1">
-                      <div className="text-[14px] font-bold text-[#171a1f]">{a.service?.name ?? 'Servicio'}</div>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-[12.5px] text-[#8a919c]">
-                        <Clock className="h-3.5 w-3.5" />
-                        {timeLabel(a.startDatetime)} · {a.professional?.user.name ?? 'Profesional'}
+                      <div className="truncate text-[14px] font-bold text-[#171a1f]">{a.service?.name ?? 'Servicio'}</div>
+                      <div className="mt-0.5 flex items-center gap-1.5 truncate text-[12.5px] text-[#8a919c]">
+                        <Clock className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">
+                          {timeLabel(a.startDatetime)} · {a.professional?.user.name ?? 'Profesional'}
+                        </span>
                       </div>
                     </div>
-                    <span className="flex items-center gap-1.5 rounded-[20px] px-[11px] py-[5px] text-[12px] font-bold whitespace-nowrap" style={{ background: meta.bg, color: meta.color }}>
+                    <span
+                      className="flex shrink-0 items-center gap-1.5 rounded-[20px] px-[11px] py-[5px] text-[12px] font-bold whitespace-nowrap"
+                      style={{ background: meta.bg, color: meta.color }}
+                    >
                       <meta.icon className="h-3.5 w-3.5" />
-                      {meta.label}
+                      <span className="hidden sm:inline">{meta.label}</span>
                     </span>
                   </div>
                 );

@@ -94,7 +94,7 @@ export function ClinicalRecordsPage() {
   const lastRecord = records[0];
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       {/* PAGE HEADER */}
       <div className="mb-[22px] flex flex-wrap items-end justify-between gap-5">
         <div>
@@ -102,7 +102,7 @@ export function ClinicalRecordsPage() {
             <FileText className="h-[17px] w-[17px]" />
             Actividad clínica
           </div>
-          <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">
+          <h2 className="mt-[7px] mb-[5px] text-[21px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[26px]">
             Historias clínicas
           </h2>
           <p className="m-0 text-[14px] text-[#6b7480]">
@@ -121,7 +121,7 @@ export function ClinicalRecordsPage() {
       </div>
 
       {/* KPI STRIP */}
-      <div className="mb-[22px] grid grid-cols-4 gap-4">
+      <div className="mb-[22px] grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {[
           { icon: ClipboardPlus, value: String(records.length), label: 'Notas totales', bg: '#eef0fe', color: '#5847eb' },
           { icon: FileText, value: String(thisWeekCount), label: 'Esta semana', bg: '#fef4e8', color: '#d97706' },
@@ -134,13 +134,13 @@ export function ClinicalRecordsPage() {
             color: '#16a34a',
           },
         ].map((k) => (
-          <div key={k.label} className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
-            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl" style={{ background: k.bg, color: k.color }}>
-              <k.icon className="h-[23px] w-[23px]" />
+          <div key={k.label} className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11" style={{ background: k.bg, color: k.color }}>
+              <k.icon className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
             </span>
-            <div>
-              <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{k.value}</div>
-              <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">{k.label}</div>
+            <div className="min-w-0">
+              <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{k.value}</div>
+              <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">{k.label}</div>
             </div>
           </div>
         ))}

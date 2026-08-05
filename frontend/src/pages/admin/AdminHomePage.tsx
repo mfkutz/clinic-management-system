@@ -231,7 +231,7 @@ export function AdminHomePage() {
   const greeting = hour < 12 ? 'Buenos días' : hour < 20 ? 'Buenas tardes' : 'Buenas noches';
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       {/* GREETING */}
       <div className="mb-[22px] flex flex-wrap items-end justify-between gap-5">
         <div>
@@ -239,7 +239,7 @@ export function AdminHomePage() {
             <Calendar className="h-[17px] w-[17px]" />
             {formatLongDateLabel(now)}
           </div>
-          <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">
+          <h2 className="mt-[7px] mb-[5px] text-[21px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[26px]">
             {greeting}, {user?.name} 👋
           </h2>
           <p className="m-0 text-[14px] text-[#6b7480]">
@@ -272,7 +272,7 @@ export function AdminHomePage() {
       </div>
 
       {/* KPI ROW */}
-      <div className="mb-5 grid grid-cols-5 gap-4">
+      <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
         <KpiCard
           icon={CalendarDays}
           iconBg="#eef0fe"
@@ -327,16 +327,16 @@ export function AdminHomePage() {
       </div>
 
       {/* MAIN GRID */}
-      <div className="grid grid-cols-[1.9fr_1fr] items-start gap-5">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.9fr_1fr]">
         {/* LEFT COLUMN */}
         <div className="flex flex-col gap-5">
           {/* AGENDA DE HOY */}
           <section className="overflow-hidden rounded-[18px] border border-[#eaecef] bg-white">
-            <div className="flex items-center justify-between border-b border-[#f0f1f3] px-5 pt-[18px] pb-3.5">
+            <div className="flex flex-wrap items-center justify-between gap-2.5 border-b border-[#f0f1f3] px-4 pt-[18px] pb-3.5 sm:px-5">
               <div className="flex items-center gap-[11px]">
                 <CalendarDays className="h-[22px] w-[22px] text-[#5847eb]" />
                 <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Agenda</h3>
-                <span className="rounded-[20px] bg-[#eef0fe] px-[9px] py-[3px] text-[12px] font-bold text-[#5847eb]">
+                <span className="hidden rounded-[20px] bg-[#eef0fe] px-[9px] py-[3px] text-[12px] font-bold text-[#5847eb] sm:inline-block">
                   {agendaAppts.length} turnos
                 </span>
               </div>
@@ -379,43 +379,45 @@ export function AdminHomePage() {
                 return (
                   <div
                     key={a.id}
-                    className="flex items-center gap-[15px] border-b border-[#f4f5f7] px-5 py-[13px] hover:bg-[#fafbfc]"
+                    className="flex items-center gap-2.5 border-b border-[#f4f5f7] px-3 py-2.5 hover:bg-[#fafbfc] sm:gap-[15px] sm:px-5 sm:py-[13px]"
                     style={{ borderLeft: `3px solid ${status.edge}` }}
                   >
-                    <div className="w-[62px] shrink-0 text-center">
-                      <div className="text-[15px] font-extrabold tracking-[-.3px] text-[#171a1f]">
+                    <div className="w-[46px] shrink-0 text-center sm:w-[62px]">
+                      <div className="text-[13px] font-extrabold tracking-[-.3px] text-[#171a1f] sm:text-[15px]">
                         {formatTimeLabel(start)}
                       </div>
-                      <div className="text-[11px] font-semibold text-[#a3a9b2]">{durationMinutes} min</div>
+                      <div className="hidden text-[11px] font-semibold text-[#a3a9b2] sm:block">{durationMinutes} min</div>
                     </div>
                     <div
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[13.5px] font-bold"
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[12.5px] font-bold sm:h-10 sm:w-10 sm:text-[13.5px]"
                       style={{ background: avatar.bg, color: avatar.color }}
                     >
                       {getInitials(clientName)}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 text-[14px] font-bold text-[#171a1f]">
-                        {clientName}
+                      <div className="flex items-center gap-2 truncate text-[13.5px] font-bold text-[#171a1f] sm:text-[14px]">
+                        <span className="truncate">{clientName}</span>
                         {isNow && (
-                          <span className="inline-flex items-center gap-1 rounded-[20px] bg-[#eaf7ef] px-[7px] py-[2px] text-[10px] font-extrabold tracking-[.04em] text-[#16a34a]">
+                          <span className="hidden shrink-0 items-center gap-1 rounded-[20px] bg-[#eaf7ef] px-[7px] py-[2px] text-[10px] font-extrabold tracking-[.04em] text-[#16a34a] sm:inline-flex">
                             <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#16a34a]" />
                             AHORA
                           </span>
                         )}
                       </div>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-[12.5px] text-[#8a919c]">
-                        <Stethoscope className="h-3.5 w-3.5" />
-                        {a.service?.name ?? 'Servicio'} · {a.professional?.user.name ?? 'Profesional'}
+                      <div className="mt-0.5 flex items-center gap-1.5 truncate text-[12px] text-[#8a919c] sm:text-[12.5px]">
+                        <Stethoscope className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">
+                          {a.service?.name ?? 'Servicio'} · {a.professional?.user.name ?? 'Profesional'}
+                        </span>
                       </div>
                     </div>
                     <span
-                      className="rounded-[20px] px-[11px] py-[5px] text-[12px] font-bold whitespace-nowrap"
+                      className="hidden shrink-0 rounded-[20px] px-[11px] py-[5px] text-[12px] font-bold whitespace-nowrap sm:inline-block"
                       style={{ background: status.bg, color: status.color }}
                     >
                       {status.label}
                     </span>
-                    <MoreHorizontal className="h-5 w-5 shrink-0 cursor-pointer rounded-lg p-0.5 text-[#c3c8d0] hover:bg-[#f4f5f7]" />
+                    <MoreHorizontal className="hidden h-5 w-5 shrink-0 cursor-pointer rounded-lg p-0.5 text-[#c3c8d0] hover:bg-[#f4f5f7] sm:block" />
                   </div>
                 );
               })}
@@ -430,8 +432,8 @@ export function AdminHomePage() {
           </section>
 
           {/* TENDENCIA */}
-          <section className="rounded-[18px] border border-[#eaecef] bg-white px-[22px] pt-[18px] pb-5">
-            <div className="mb-1.5 flex items-center justify-between">
+          <section className="rounded-[18px] border border-[#eaecef] bg-white px-4 pt-[18px] pb-5 sm:px-[22px]">
+            <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Turnos de la semana</h3>
                 <p className="mt-1 mb-0 text-[12.5px] text-[#8a919c]">Atendidos vs. programados · últimos 7 días</p>
@@ -607,18 +609,18 @@ interface KpiCardProps {
 
 function KpiCard({ icon: Icon, iconBg, iconColor, value, label, delta, deltaIcon: DeltaIcon, deltaColor, mock }: KpiCardProps) {
   return (
-    <div className="flex flex-col gap-[13px] rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
+    <div className="flex flex-col gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-[13px] sm:px-[18px] sm:py-[17px]">
       <div className="flex items-center justify-between">
-        <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px]" style={{ background: iconBg, color: iconColor }}>
-          <Icon className="h-[21px] w-[21px]" />
+        <span className="flex h-8 w-8 items-center justify-center rounded-[11px] sm:h-[38px] sm:w-[38px]" style={{ background: iconBg, color: iconColor }}>
+          <Icon className="h-[18px] w-[18px] sm:h-[21px] sm:w-[21px]" />
         </span>
-        <span className="flex items-center gap-[3px] text-[12px] font-bold" style={{ color: deltaColor }}>
+        <span className="flex items-center gap-[3px] text-[11.5px] font-bold sm:text-[12px]" style={{ color: deltaColor }}>
           <DeltaIcon className="h-[15px] w-[15px]" />
           {delta}
         </span>
       </div>
       <div>
-        <div className="text-[25px] font-extrabold tracking-[-.6px] text-[#171a1f]">{value}</div>
+        <div className="text-[20px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[25px]">{value}</div>
         <div className="mt-1.5 flex items-center gap-1 text-[12.5px] font-semibold text-[#8a919c]">
           {label}
           {mock && <span title="Dato de ejemplo, cálculo real pendiente">*</span>}

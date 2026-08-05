@@ -32,7 +32,7 @@ function AvailabilityForm({ onSubmit }: { onSubmit: (values: CreateAvailabilityF
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl border border-[#eaecef] bg-white p-5">
       <h3 className="mb-3.5 text-[15px] font-extrabold tracking-[-.2px] text-[#171a1f]">Agregar franja horaria</h3>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div>
           <label className={labelClass}>Día</label>
           <select className={inputClass} {...register('dayOfWeek', { valueAsNumber: true })}>
@@ -212,20 +212,20 @@ export function ProfessionalAvailabilityPage() {
   if (error && !professionalId) return <p className="p-7 text-sm text-red-600">{error}</p>;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mb-[22px]">
         <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
           <Clock className="h-[17px] w-[17px]" />
           Tu agenda
         </div>
-        <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">Disponibilidad</h2>
+        <h2 className="mt-[7px] mb-[5px] text-[21px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[26px]">Disponibilidad</h2>
         <p className="m-0 text-[14px] text-[#6b7480]">Definí tu horario semanal recurrente y los días excepcionales.</p>
       </div>
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
       {professionalId && (
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <section className="flex flex-col gap-4">
             <h3 className="m-0 text-[16px] font-extrabold tracking-[-.3px] text-[#171a1f]">Disponibilidad semanal</h3>
             <AvailabilityForm key={availabilityFormKey} onSubmit={handleAddAvailability} />

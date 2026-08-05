@@ -92,7 +92,7 @@ export function PatientDetailPage() {
   const upcoming = patient.appointments.filter((a) => a.status === 'confirmed').length;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <Link
         to="/pacientes"
         className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#5847eb] hover:text-[#4636cf]"
@@ -102,7 +102,7 @@ export function PatientDetailPage() {
       </Link>
 
       {/* HEADER CARD */}
-      <div className="mb-5 flex flex-wrap items-center gap-5 rounded-[20px] border border-[#eaecef] bg-white p-6">
+      <div className="mb-5 flex flex-wrap items-center gap-4 rounded-[20px] border border-[#eaecef] bg-white p-4 sm:gap-5 sm:p-6">
         <div
           className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-[21px] font-extrabold"
           style={{ background: avatar.bg, color: avatar.color }}
@@ -133,23 +133,23 @@ export function PatientDetailPage() {
           </div>
         </div>
 
-        <div className="flex items-center rounded-[14px] border border-[#f0f1f3] bg-[#fbfbfc] py-3">
-          <div className="w-[100px] text-center">
+        <div className="flex w-full items-center rounded-[14px] border border-[#f0f1f3] bg-[#fbfbfc] py-3 sm:w-auto">
+          <div className="flex-1 text-center sm:w-[100px] sm:flex-none">
             <div className="text-[18px] font-extrabold text-[#5847eb]">{patient.appointments.length}</div>
             <div className="mt-0.5 text-[11px] font-semibold text-[#9aa1ac]">Turnos totales</div>
           </div>
-          <div className="w-[100px] border-l border-[#eef0f2] text-center">
+          <div className="flex-1 border-l border-[#eef0f2] text-center sm:w-[100px] sm:flex-none">
             <div className="text-[18px] font-extrabold text-[#171a1f]">{upcoming}</div>
             <div className="mt-0.5 text-[11px] font-semibold text-[#9aa1ac]">Próximos</div>
           </div>
-          <div className="w-[130px] border-l border-[#eef0f2] text-center">
+          <div className="flex-1 border-l border-[#eef0f2] text-center sm:w-[130px] sm:flex-none">
             <div className="text-[18px] font-extrabold text-[#16a34a]">{lastVisit ? shortDate(lastVisit.startDatetime) : '—'}</div>
             <div className="mt-0.5 text-[11px] font-semibold text-[#9aa1ac]">Última visita</div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-[1.3fr_1fr] items-start gap-5">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[1.3fr_1fr]">
         {/* HISTORIAL DE TURNOS */}
         <section className="rounded-[18px] border border-[#eaecef] bg-white p-5">
           <div className="mb-4 flex items-center gap-2.5">
@@ -166,31 +166,35 @@ export function PatientDetailPage() {
                 return (
                   <div
                     key={a.id}
-                    className="flex items-center gap-3 rounded-[13px] border border-[#f0f1f3] px-4 py-3"
+                    className="flex flex-col gap-3 rounded-[13px] border border-[#f0f1f3] p-4 sm:flex-row sm:items-start sm:py-3"
                     style={{ borderLeft: `3px solid ${statusMeta.color}` }}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="text-[13.5px] font-bold text-[#171a1f]">{a.service?.name ?? 'Servicio'}</div>
                       <div className="mt-0.5 flex items-center gap-1.5 text-[12px] text-[#8a919c]">
-                        <UserRound className="h-3.5 w-3.5" />
-                        {a.professional?.user.name ?? 'Profesional'}
-                        {a.professional?.specialty && <span className="opacity-70">· {a.professional.specialty}</span>}
+                        <UserRound className="h-3.5 w-3.5 shrink-0" />
+                        <span className="truncate">
+                          {a.professional?.user.name ?? 'Profesional'}
+                          {a.professional?.specialty && ` · ${a.professional.specialty}`}
+                        </span>
                       </div>
                       {a.notes && <p className="mt-1.5 text-[12px] text-[#a3a9b2] italic">"{a.notes}"</p>}
                       {a.status === 'cancelled' && a.cancellationReason && (
                         <p className="mt-1.5 text-[12px] text-[#dc2626] italic">Motivo: {a.cancellationReason}</p>
                       )}
                     </div>
-                    <div className="shrink-0 text-right">
-                      <div className="text-[12.5px] font-bold text-[#4b535e]">{fullDate(a.startDatetime)}</div>
-                      <div className="mt-0.5 text-[11.5px] font-semibold text-[#a3a9b2]">{timeLabel(a.startDatetime)}</div>
+                    <div className="flex items-center justify-between gap-3 sm:shrink-0 sm:flex-col sm:items-end sm:gap-0 sm:text-right">
+                      <div>
+                        <div className="text-[12.5px] font-bold text-[#4b535e]">{fullDate(a.startDatetime)}</div>
+                        <div className="mt-0.5 text-[11.5px] font-semibold text-[#a3a9b2]">{timeLabel(a.startDatetime)}</div>
+                      </div>
+                      <span
+                        className="shrink-0 rounded-[20px] px-[10px] py-[4px] text-[11px] font-bold sm:mt-2"
+                        style={{ background: statusMeta.tint, color: statusMeta.color }}
+                      >
+                        {statusMeta.label}
+                      </span>
                     </div>
-                    <span
-                      className="shrink-0 rounded-[20px] px-[10px] py-[4px] text-[11px] font-bold"
-                      style={{ background: statusMeta.tint, color: statusMeta.color }}
-                    >
-                      {statusMeta.label}
-                    </span>
                   </div>
                 );
               })}

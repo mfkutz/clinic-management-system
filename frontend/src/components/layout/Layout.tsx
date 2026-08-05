@@ -1,5 +1,5 @@
 import { CalendarClock } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { Sidebar } from './Sidebar';
@@ -8,7 +8,13 @@ import { TopHeader } from './TopHeader';
 export function Layout() {
   const user = useAuthStore((s) => s.user);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+
+  // Cerrar el drawer mobile al navegar a otra ruta (SPA: no hay reload que lo haga solo).
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
   // Rutas ya rediseñadas sección por sección (handoff de Claude Design, o diseñadas con el mismo
   // criterio cuando no hubo handoff), que manejan sus propias cards en vez de depender del wrapper
   // genérico de abajo. Las 3 secciones de "Inicio" (una por rol) están todas rediseñadas.
@@ -44,16 +50,21 @@ export function Layout() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#f6f7f9]">
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
+      <Sidebar
+        collapsed={collapsed}
+        onToggle={() => setCollapsed((v) => !v)}
+        mobileOpen={mobileOpen}
+        onCloseMobile={() => setMobileOpen(false)}
+      />
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopHeader onToggleSidebar={() => setCollapsed((v) => !v)} />
+        <TopHeader onOpenMobileSidebar={() => setMobileOpen(true)} />
         {isFullBleed ? (
           <main className="flex-1 overflow-y-auto">
             <Outlet />
           </main>
         ) : (
-          <main className="flex-1 overflow-y-auto p-6">
-            <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm lg:p-6 dark:border-gray-800 dark:bg-gray-900">
               <Outlet />
             </div>
           </main>

@@ -354,9 +354,12 @@ export function AgendaPage() {
       : `${DAY_FULL[focusDate.getUTCDay()]} ${focusDate.getUTCDate()} de ${monthLabel(focusDate)} ${focusDate.getUTCFullYear()}`;
   const visibleCount = days.reduce((sum, d) => sum + d.blocks.length, 0);
   const subLabel = view === 'week' ? `Semana · ${visibleCount} turnos` : `${visibleCount} turnos`;
+  // En semana, cada día necesita un ancho mínimo legible — en mobile eso se resuelve con scroll
+  // horizontal (header + grilla comparten este mismo ancho para desplazarse sincronizados).
+  const gridMinWidth = view === 'week' ? 66 + visibleDays.length * 130 : undefined;
 
   return (
-    <div className="px-[26px] pt-[22px] pb-[34px]">
+    <div className="px-3 pt-4 pb-6 lg:px-[26px] lg:pt-[22px] lg:pb-[34px]">
       <div className="overflow-hidden rounded-[18px] border border-[#eaecef] bg-white">
         {/* TOOLBAR */}
         <div className="flex flex-wrap items-center gap-4 border-b border-[#f0f1f3] px-5 py-4">
@@ -453,6 +456,10 @@ export function AgendaPage() {
           </div>
         </div>
 
+        {/* En semana, header y grilla comparten un contenedor con scroll horizontal para no
+            desincronizarse; en día, ocupan el ancho disponible sin necesidad de scroll. */}
+        <div className="overflow-x-auto">
+        <div style={{ minWidth: gridMinWidth }}>
         {/* DAY HEADER */}
         <div className="flex border-b border-[#eef0f2] bg-[#fcfcfd] pr-1.5">
           <div className="w-[66px] shrink-0" />
@@ -557,13 +564,15 @@ export function AgendaPage() {
             </div>
           </div>
         </div>
+        </div>
+        </div>
       </div>
 
       {/* DETAIL DRAWER */}
       {selected && (
         <>
           <div className="fixed inset-0 z-40 bg-[rgba(23,26,31,.28)]" onClick={() => setSelectedId(null)} />
-          <div className="fixed top-0 right-0 z-50 flex h-full w-[394px] flex-col border-l border-[#eaecef] bg-white shadow-[-16px_0_44px_-22px_rgba(23,26,31,.4)]">
+          <div className="fixed top-0 right-0 z-50 flex h-full w-full max-w-[394px] flex-col border-l border-[#eaecef] bg-white shadow-[-16px_0_44px_-22px_rgba(23,26,31,.4)]">
             <div className="flex items-center justify-between border-b border-[#f0f1f3] px-5 py-[18px]">
               <div className="flex items-center gap-2">
                 <CalendarCheck className="h-[21px] w-[21px] text-[#5847eb]" />

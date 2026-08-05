@@ -290,7 +290,7 @@ function ServiceRow({ service, pros, onEdit, onToggle, toggling }: ServiceCardPr
   const meta = CATEGORY_META[service.category];
   return (
     <div
-      className="flex items-center gap-4 rounded-[14px] border border-[#eaecef] bg-white px-4 py-3"
+      className="flex flex-wrap items-center gap-2.5 rounded-[14px] border border-[#eaecef] bg-white p-3.5 sm:gap-4 sm:px-4 sm:py-3"
       style={{ opacity: service.active ? 1 : 0.62 }}
     >
       <span
@@ -299,16 +299,18 @@ function ServiceRow({ service, pros, onEdit, onToggle, toggling }: ServiceCardPr
       >
         <meta.icon className="h-5 w-5" />
       </span>
-      <div className="w-[220px] min-w-0 shrink-0">
+      <div className="min-w-[130px] sm:w-[220px] sm:shrink-0">
         <div className="truncate text-[14px] font-bold text-[#171a1f]">{service.name}</div>
         <div className="mt-0.5 text-[11.5px] font-semibold" style={{ color: meta.color }}>
           {service.category}
         </div>
       </div>
-      <p className="m-0 min-w-0 flex-1 truncate text-[12.5px] text-[#8a919c]">{service.description || 'Sin descripción.'}</p>
-      <div className="w-[70px] shrink-0 text-[13.5px] font-bold text-[#171a1f]">{service.durationMinutes} min</div>
-      <div className="w-[100px] shrink-0 text-[13.5px] font-extrabold text-[#5847eb]">{formatMoney(service.price)}</div>
-      <div className="flex w-[70px] shrink-0 items-center">
+      <p className="m-0 hidden min-w-0 flex-1 truncate text-[12.5px] text-[#8a919c] sm:block">
+        {service.description || 'Sin descripción.'}
+      </p>
+      <div className="shrink-0 text-[13px] font-bold text-[#171a1f] sm:w-[70px] sm:text-[13.5px]">{service.durationMinutes} min</div>
+      <div className="shrink-0 text-[13px] font-extrabold text-[#5847eb] sm:w-[100px] sm:text-[13.5px]">{formatMoney(service.price)}</div>
+      <div className="hidden shrink-0 items-center sm:flex sm:w-[70px]">
         {pros.slice(0, 3).map((p) => {
           const avatar = avatarStyle(p.id);
           return (
@@ -324,12 +326,12 @@ function ServiceRow({ service, pros, onEdit, onToggle, toggling }: ServiceCardPr
         })}
       </div>
       <span
-        className="w-[70px] shrink-0 rounded-[20px] px-[10px] py-[4px] text-center text-[11px] font-bold"
+        className="shrink-0 rounded-[20px] px-[10px] py-[4px] text-center text-[11px] font-bold sm:w-[70px]"
         style={service.active ? { background: '#eaf7ef', color: '#16a34a' } : { background: '#eef1f4', color: '#98a0ab' }}
       >
         {service.active ? 'Activo' : 'Inactivo'}
       </span>
-      <div className="flex shrink-0 gap-2">
+      <div className="ml-auto flex shrink-0 gap-2">
         <button
           type="button"
           onClick={onEdit}
@@ -438,7 +440,7 @@ export function AdminServicesPage() {
   const avgPrice = services.length ? services.reduce((sum, s) => sum + Number(s.price), 0) / services.length : 0;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       {formService !== undefined && (
         <FormPanel service={formService} onSubmit={handleFormSubmit} onClose={() => setFormService(undefined)} />
       )}
@@ -475,23 +477,23 @@ export function AdminServicesPage() {
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
       {/* KPI STRIP */}
-      <div className="mb-[22px] grid grid-cols-4 gap-4">
+      <div className="mb-[22px] grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
         {[
           { icon: Stethoscope, value: String(services.length), label: 'Servicios totales', bg: '#eef0fe', color: '#5847eb' },
           { icon: ShieldCheck, value: String(activeCount), label: 'Activos', bg: '#eaf7ef', color: '#16a34a' },
           { icon: Syringe, value: `${avgDuration} min`, label: 'Duración promedio', bg: '#fef4e8', color: '#d97706' },
           { icon: Sparkles, value: formatMoney(Math.round(avgPrice)), label: 'Precio promedio', bg: '#eef7f2', color: '#0f9d63' },
         ].map((k) => (
-          <div key={k.label} className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
+          <div key={k.label} className="flex items-center gap-2.5 rounded-2xl border border-[#eaecef] bg-white px-3.5 py-3.5 sm:gap-3.5 sm:px-[18px] sm:py-[17px]">
             <span
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11"
               style={{ background: k.bg, color: k.color }}
             >
-              <k.icon className="h-[23px] w-[23px]" />
+              <k.icon className="h-[19px] w-[19px] sm:h-[23px] sm:w-[23px]" />
             </span>
-            <div>
-              <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{k.value}</div>
-              <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">{k.label}</div>
+            <div className="min-w-0">
+              <div className="truncate text-[18px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[23px]">{k.value}</div>
+              <div className="mt-[3px] text-[11.5px] font-semibold text-[#8a919c] sm:mt-[5px] sm:text-[12.5px]">{k.label}</div>
             </div>
           </div>
         ))}
@@ -567,7 +569,7 @@ export function AdminServicesPage() {
       {filteredServices.length === 0 && <p className="text-sm text-[#8a919c]">No hay servicios que coincidan.</p>}
 
       {view === 'grid' ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-4">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-4">
           {filteredServices.map((s) => (
             <ServiceCard
               key={s.id}

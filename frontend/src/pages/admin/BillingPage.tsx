@@ -61,25 +61,25 @@ export function BillingPage() {
   if (loading) return <p className="p-7 text-sm text-gray-500">Cargando…</p>;
 
   return (
-    <div className="px-[28px] pt-[26px] pb-[40px]">
+    <div className="px-4 pt-5 pb-8 lg:px-[28px] lg:pt-[26px] lg:pb-[40px]">
       <div className="mb-[22px]">
         <div className="flex items-center gap-[7px] text-[13px] font-semibold text-[#8a919c]">
           <CreditCard className="h-[17px] w-[17px]" />
           Finanzas
         </div>
-        <h2 className="mt-[7px] mb-[5px] text-[26px] font-extrabold tracking-[-.6px] text-[#171a1f]">Cobros</h2>
+        <h2 className="mt-[7px] mb-[5px] text-[21px] font-extrabold tracking-[-.6px] text-[#171a1f] sm:text-[26px]">Cobros</h2>
         <p className="m-0 text-[14px] text-[#6b7480]">Seguimiento de pagos de turnos confirmados y atendidos.</p>
       </div>
 
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-      <div className="mb-5 grid grid-cols-[1fr_1fr_1.4fr] gap-4">
+      <div className="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-[1fr_1fr_1.4fr] sm:gap-4">
         <div className="flex items-center gap-3.5 rounded-2xl border border-[#eaecef] bg-white px-[18px] py-[17px]">
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#eaf7ef] text-[#16a34a]">
             <CheckCircle2 className="h-[23px] w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{formatMoney(totalCollected)}</div>
+          <div className="min-w-0">
+            <div className="truncate text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{formatMoney(totalCollected)}</div>
             <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Cobrado · {collected.length} turnos</div>
           </div>
         </div>
@@ -87,8 +87,8 @@ export function BillingPage() {
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#fef4e8] text-[#d97706]">
             <Clock className="h-[23px] w-[23px]" />
           </span>
-          <div>
-            <div className="text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{formatMoney(totalPending)}</div>
+          <div className="min-w-0">
+            <div className="truncate text-[23px] font-extrabold tracking-[-.6px] text-[#171a1f]">{formatMoney(totalPending)}</div>
             <div className="mt-[5px] text-[12.5px] font-semibold text-[#8a919c]">Pendiente · {pending.length} turnos</div>
           </div>
         </div>
@@ -143,26 +143,32 @@ export function BillingPage() {
             const avatar = avatarStyle(a.client?.id ?? a.id);
             const paid = a.paymentStatus === 'paid';
             return (
-              <div key={a.id} className="flex items-center gap-4 rounded-[14px] border border-[#eaecef] bg-white px-4 py-3.5">
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] text-[13px] font-bold"
-                  style={{ background: avatar.bg, color: avatar.color }}
-                >
-                  {getInitials(a.client?.name ?? 'Cliente')}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="truncate text-[14px] font-bold text-[#171a1f]">{a.client?.name ?? 'Cliente'}</div>
-                  <div className="mt-0.5 flex items-center gap-1.5 truncate text-[12.5px] text-[#8a919c]">
-                    <Stethoscope className="h-3.5 w-3.5 shrink-0" />
-                    {a.service?.name ?? 'Servicio'} · {a.professional?.user.name ?? 'Profesional'}
+              <div key={a.id} className="flex flex-col gap-3 rounded-[14px] border border-[#eaecef] bg-white p-4 sm:flex-row sm:items-center sm:gap-4 sm:px-4 sm:py-3.5">
+                <div className="flex items-center gap-3 sm:contents">
+                  <span
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[11px] text-[13px] font-bold"
+                    style={{ background: avatar.bg, color: avatar.color }}
+                  >
+                    {getInitials(a.client?.name ?? 'Cliente')}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[14px] font-bold text-[#171a1f]">{a.client?.name ?? 'Cliente'}</div>
+                    <div className="mt-0.5 flex items-center gap-1.5 truncate text-[12.5px] text-[#8a919c]">
+                      <Stethoscope className="h-3.5 w-3.5 shrink-0" />
+                      <span className="truncate">
+                        {a.service?.name ?? 'Servicio'} · {a.professional?.user.name ?? 'Profesional'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex w-[110px] shrink-0 items-center gap-1.5 text-[12.5px] text-[#6b7480]">
-                  <Calendar className="h-3.5 w-3.5 text-[#a3a9b2]" />
-                  {new Date(a.startDatetime).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', '')}
+                <div className="flex flex-wrap items-center gap-3 sm:w-[110px] sm:shrink-0 sm:gap-1.5 sm:text-[12.5px] sm:text-[#6b7480]">
+                  <Calendar className="hidden h-3.5 w-3.5 text-[#a3a9b2] sm:block" />
+                  <span className="text-[12.5px] text-[#6b7480] sm:text-inherit">
+                    {new Date(a.startDatetime).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', timeZone: 'UTC' }).replace('.', '')}
+                  </span>
                 </div>
-                <div className="w-[100px] shrink-0 text-[14px] font-extrabold text-[#171a1f]">{formatMoney(a.amount)}</div>
-                <div className="w-[140px] shrink-0">
+                <div className="text-[14px] font-extrabold text-[#171a1f] sm:w-[100px] sm:shrink-0">{formatMoney(a.amount)}</div>
+                <div className="sm:w-[140px] sm:shrink-0">
                   <span
                     className="flex w-fit items-center gap-1.5 rounded-[20px] px-[10px] py-[4px] text-[11.5px] font-bold whitespace-nowrap"
                     style={paid ? { background: '#eaf7ef', color: '#16a34a' } : { background: '#fef4e8', color: '#d97706' }}
@@ -171,32 +177,30 @@ export function BillingPage() {
                     {paid ? a.paymentMethod ?? 'Cobrado' : 'Pendiente'}
                   </span>
                 </div>
-                <div className="flex w-[210px] shrink-0 justify-end gap-2">
-                  {!paid && (
-                    <>
-                      <select
-                        value={methodByAppointment[a.id] ?? PAYMENT_METHODS[0]}
-                        onChange={(e) => setMethodByAppointment((prev) => ({ ...prev, [a.id]: e.target.value }))}
-                        className="rounded-[9px] border border-[#eaecef] bg-white px-2 py-1.5 text-[12px] font-semibold text-[#4b535e] focus:border-[#5847eb] focus:outline-none"
-                      >
-                        {PAYMENT_METHODS.map((m) => (
-                          <option key={m} value={m}>
-                            {m}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        type="button"
-                        onClick={() => handleMarkPaid(a.id)}
-                        disabled={payingId === a.id}
-                        className="flex items-center gap-1.5 rounded-[9px] bg-[#5847eb] px-3 py-1.5 text-[12px] font-bold text-white hover:bg-[#4636cf] disabled:opacity-60"
-                      >
-                        <Banknote className="h-[15px] w-[15px]" />
-                        {payingId === a.id ? 'Guardando…' : 'Marcar cobrado'}
-                      </button>
-                    </>
-                  )}
-                </div>
+                {!paid && (
+                  <div className="flex flex-wrap justify-end gap-2 sm:w-[210px] sm:shrink-0">
+                    <select
+                      value={methodByAppointment[a.id] ?? PAYMENT_METHODS[0]}
+                      onChange={(e) => setMethodByAppointment((prev) => ({ ...prev, [a.id]: e.target.value }))}
+                      className="rounded-[9px] border border-[#eaecef] bg-white px-2 py-1.5 text-[12px] font-semibold text-[#4b535e] focus:border-[#5847eb] focus:outline-none"
+                    >
+                      {PAYMENT_METHODS.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      onClick={() => handleMarkPaid(a.id)}
+                      disabled={payingId === a.id}
+                      className="flex items-center gap-1.5 rounded-[9px] bg-[#5847eb] px-3 py-1.5 text-[12px] font-bold text-white hover:bg-[#4636cf] disabled:opacity-60"
+                    >
+                      <Banknote className="h-[15px] w-[15px]" />
+                      {payingId === a.id ? 'Guardando…' : 'Marcar cobrado'}
+                    </button>
+                  </div>
+                )}
               </div>
             );
           })}

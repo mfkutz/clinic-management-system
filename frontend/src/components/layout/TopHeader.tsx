@@ -19,10 +19,10 @@ const primaryActionByRole: Record<UserRole, { to: string; label: string }> = {
 };
 
 interface TopHeaderProps {
-  onToggleSidebar: () => void;
+  onOpenMobileSidebar: () => void;
 }
 
-export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
+export function TopHeader({ onOpenMobileSidebar }: TopHeaderProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
@@ -54,16 +54,16 @@ export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
   }
 
   return (
-    <header className="flex h-[66px] shrink-0 items-center gap-5 border-b border-[#eaecef] bg-white px-6.5">
+    <header className="flex h-[60px] shrink-0 items-center gap-3 border-b border-[#eaecef] bg-white px-4 lg:h-[66px] lg:gap-5 lg:px-6.5">
       <button
         type="button"
-        onClick={onToggleSidebar}
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#9aa1ac] hover:bg-[#f4f5f7] md:hidden"
+        onClick={onOpenMobileSidebar}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#9aa1ac] hover:bg-[#f4f5f7] lg:hidden"
       >
         <Menu className="h-[18px] w-[18px]" />
       </button>
 
-      <h1 className="shrink-0 text-[19px] font-extrabold tracking-tight text-[#171a1f]">{title}</h1>
+      <h1 className="min-w-0 shrink-0 truncate text-[16px] font-extrabold tracking-tight text-[#171a1f] lg:text-[19px]">{title}</h1>
 
       <div className="hidden max-w-[440px] flex-1 items-center gap-2 rounded-[11px] border border-[#eef0f2] bg-[#f4f5f7] px-3.5 py-2.5 text-[#9aa1ac] md:flex">
         <Search className="h-[19px] w-[19px] shrink-0" />
@@ -73,27 +73,27 @@ export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
         </span>
       </div>
 
-      <div className="ml-auto flex shrink-0 items-center gap-2.5">
+      <div className="ml-auto flex shrink-0 items-center gap-1.5 lg:gap-2.5">
         {primaryAction.to !== location.pathname && (
           <Link
             to={primaryAction.to}
-            className="flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-4 py-2.5 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] hover:bg-[#4636cf]"
+            className="flex items-center gap-1.5 rounded-[11px] bg-[#5847eb] px-3 py-2 text-[13.5px] font-bold text-white shadow-[0_6px_16px_-6px_rgba(88,71,235,.6)] hover:bg-[#4636cf] lg:px-4 lg:py-2.5"
           >
             <Plus className="h-[19px] w-[19px]" />
-            {primaryAction.label}
+            <span className="hidden sm:inline">{primaryAction.label}</span>
           </Link>
         )}
         <button
           type="button"
           title="Ayuda"
-          className="hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] sm:flex"
+          className="hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] lg:flex"
         >
           <HelpCircle className="h-5 w-5" />
         </button>
         <button
           type="button"
           title="Notificaciones"
-          className="relative hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] sm:flex"
+          className="relative hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] lg:flex"
         >
           <Bell className="h-5 w-5" />
           <span className="absolute top-2 right-2.5 h-[7px] w-[7px] rounded-full border border-white bg-[#ef4444]" />
@@ -101,7 +101,7 @@ export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
         <button
           type="button"
           title="Configuración"
-          className="hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] sm:flex"
+          className="hidden h-10 w-10 items-center justify-center rounded-[11px] border border-[#eef0f2] bg-white text-[#6b7480] hover:bg-[#f4f5f7] lg:flex"
         >
           <Settings className="h-5 w-5" />
         </button>
@@ -112,14 +112,14 @@ export function TopHeader({ onToggleSidebar }: TopHeaderProps) {
             onClick={() => setMenuOpen((v) => !v)}
             className="flex items-center gap-2.5 rounded-[11px] py-1 pr-2 pl-1 hover:bg-[#f4f5f7]"
           >
-            <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-[#5847eb] text-[15px] font-bold text-white">
+            <span className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-[11px] bg-[#5847eb] text-[14px] font-bold text-white lg:h-[38px] lg:w-[38px] lg:text-[15px]">
               {initials}
             </span>
-            <span className="hidden text-left leading-tight sm:block">
+            <span className="hidden text-left leading-tight lg:block">
               <span className="block text-[13.5px] font-bold text-[#171a1f]">{user.name}</span>
               <span className="block text-[11.5px] text-[#8a919c]">{roleLabels[user.role]}</span>
             </span>
-            <ChevronDown className="hidden h-[18px] w-[18px] text-[#b8bec7] sm:block" />
+            <ChevronDown className="hidden h-[18px] w-[18px] text-[#b8bec7] lg:block" />
           </button>
 
           {menuOpen && (
